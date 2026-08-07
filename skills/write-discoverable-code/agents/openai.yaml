@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Discoverable Code"
+  short_description: "Make code easy to find through plain-text search."
+  default_prompt: "Use $write-discoverable-code to improve naming, module ownership, and searchability in this change."

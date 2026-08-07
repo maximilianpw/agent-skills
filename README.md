@@ -22,8 +22,15 @@ Update installed skills:
 npx skills update --global
 ```
 
+## Skills
+
+- `add-fleet-host` — add a trusted machine to the declarative nix-config fleet.
+- `remote-development` — operate remote development machines through the Fleet CLI.
+- `typescript-standards` — pragmatic TypeScript standards with Effect guidance gated per package or explicit request.
+- `write-discoverable-code` — make names, modules, errors, and events easy to find through search.
+
 ## Layout
 
 Each first-party skill lives under `skills/<name>/` and follows the [Agent Skills specification](https://agentskills.io/specification).
 
-Third-party skills are not vendored here. Install them from their upstream repositories with the Skills CLI so their source and update history remain intact.
+Third-party skills are not vendored here. Install them from their upstream repositories with the Skills CLI so their source and update history remain intact. Adapted work retains its upstream license and attribution inside the skill directory.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Standards"
+  short_description: "Apply pragmatic TypeScript standards with optional Effect guidance."
+  default_prompt: "Use $typescript-standards to implement or review this TypeScript change using the repository's conventions."
