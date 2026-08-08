@@ -40,6 +40,15 @@ Start unfamiliar task classes with Sol, then delegate bounded work to cheaper mo
 
 **Fable 5** is an unscored specialist for independent plan and implementation reviews. Use Opus 5 when the review also needs editing, architectural judgment, or final synthesis. Add GPT-5.6 Sol only when another independent perspective is worth the cost.
 
+## Invoke across harnesses
+
+After selecting a model, load the adapter for the current harness when delegation crosses model families:
+
+- From Claude Code to an OpenAI model: [`references/from-claude-code.md`](references/from-claude-code.md).
+- From Codex to a Claude model: [`references/from-codex.md`](references/from-codex.md).
+
+Use native workflow or subagent model selection when the current harness supports the selected model directly.
+
 ## Recover from weak output
 
 If a cheaper model misses the bar, rerun or redo the work with a stronger model without asking. If a named model is unavailable, choose the closest available model that satisfies the role; do not silently route user-facing work to a low-taste model.
