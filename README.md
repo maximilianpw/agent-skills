@@ -24,7 +24,6 @@ npx skills update --global
 
 ## Skills
 
-- `add-fleet-host` — add a trusted machine to the declarative nix-config fleet.
 - `remote-development` — operate remote development machines through the Fleet CLI.
 - `typescript-standards` — pragmatic TypeScript standards with Effect guidance gated per package or explicit request.
 - `write-discoverable-code` — make names, modules, errors, and events easy to find through search.
