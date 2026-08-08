@@ -24,6 +24,7 @@ npx skills update --global
 
 ## Skills
 
+- `model-routing` — select models for workflows, subagents, and independent reviews.
 - `remote-development` — operate remote development machines through the Fleet CLI.
 - `typescript-standards` — pragmatic TypeScript standards with Effect guidance gated per package or explicit request.
 - `write-discoverable-code` — make names, modules, errors, and events easy to find through search.
