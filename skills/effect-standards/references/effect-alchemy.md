@@ -27,7 +27,7 @@ Effect.gen(function* () {
 }).pipe(Effect.provide(applicationDependencyLayer));
 ```
 
-Do not bypass an existing Layer by yielding its exported `makeApplicationDependency` construction Effect directly from the composition root. The Layer is the implementation choice and preserves dependency wiring, acquisition semantics, memoization, and substitution.
+Provide an existing Layer from the composition root rather than exposing or yielding a raw `makeApplicationDependency` construction Effect. The Layer is the implementation choice and preserves dependency wiring, acquisition semantics, memoization, and substitution.
 
 When an inner runtime Layer needs an outer-initialized service, bridge the captured value with `Layer.succeed`:
 
@@ -48,4 +48,4 @@ Describe state-backed Layers outside when useful, then acquire them only inside 
 
 ## Completion check
 
-Every changed Alchemy constructor follows the pinned two-phase model; infrastructure-backed application Layers are provided to the outer Effect; stable services are yielded by tag and closed over; no composition root bypasses an existing Layer through its `make` Effect; inner runtime Layers receive captured services through value Layers when necessary; deploy-time bindings remain discoverable during planning; and state-backed resources execute only in the runtime phase.
+Every changed Alchemy constructor follows the pinned two-phase model; infrastructure-backed application Layers are provided to the outer Effect; stable services are yielded by tag and closed over; no composition root bypasses an existing Layer through a raw construction Effect; inner runtime Layers receive captured services through value Layers when necessary; deploy-time bindings remain discoverable during planning; and state-backed resources execute only in the runtime phase.

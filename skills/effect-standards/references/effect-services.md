@@ -26,7 +26,7 @@ A service seam represents real ownership or variability in production. When inje
 
 ## Authority and requirements
 
-The application module identified by [`modules-services-and-adapters.md`](modules-services-and-adapters.md) owns the capability's interface and tag. A technology Adapter owns its concrete `make` and Layer only after translation, mechanics, reuse, or real implementation variation earns that seam. The composition root selects top-level concrete Layers; a service module assembles only dependency implementations it truthfully owns. Reusable policy remains in its owning application service.
+The application module identified by [`modules-services-and-adapters.md`](modules-services-and-adapters.md) owns the capability's interface and tag. A technology Adapter owns its concrete construction and Layers only after translation, mechanics, reuse, or real implementation variation earns that seam. The composition root selects top-level concrete Layers; a service module assembles only dependency implementations it truthfully owns. Reusable policy remains in its owning application service.
 
 Yield stable runtime capabilities and implementation dependencies while building the Layer and close over them in service methods. Yield request-, fiber-, or operation-scoped context inside the method that uses it. Let requirements propagate until the module that truthfully chooses an implementation provides them.
 
@@ -45,28 +45,27 @@ export class Service extends Context.Service<Service, Interface>()(
   "@app/Capability",
 ) {}
 
-export const make: Effect.Effect<
-  Service["Service"],
-  never,
-  Dependency.Service
-> = Effect.gen(function* () {
-  const dependency = yield* Dependency.Service
+export const layerWithoutDependencies = Layer.effect(
+  Service,
+  Effect.gen(function* () {
+    const dependency = yield* Dependency.Service
 
-  const operation = Effect.fn("Capability.operation")(function* (input: Input) {
-    return yield* dependency.operation(input)
-  })
+    const operation = Effect.fn("Capability.operation")(function* (input: Input) {
+      return yield* dependency.operation(input)
+    })
 
-  return Service.of({ operation })
-})
-
-export const layerWithoutDependencies = Layer.effect(Service, make)
+    return Service.of({ operation })
+  }),
+)
 
 export const layer = layerWithoutDependencies.pipe(
   Layer.provide([Dependency.layer]),
 )
 ```
 
-`Interface`, `Service`, `make`, `layerWithoutDependencies`, and `layer` are canonical role names within an Effect capability module. The owning module namespace and service tag identify the capability. `layerWithoutDependencies` preserves requirements for composition. `layer` is the ready production assembly and provides the concrete dependency Layers chosen by this module.
+`Interface`, `Service`, `layerWithoutDependencies`, and `layer` are canonical public role names within an Effect capability module. The owning module namespace and service tag identify the capability. `layerWithoutDependencies` preserves requirements for composition. `layer` is the ready production assembly and provides the concrete dependency Layers chosen by this module.
+
+Keep application-owned service and Adapter construction private to the module that owns the implementation. Inline construction when one Layer uses it. When several Layers owned by that module share construction, use a file-local factory such as `make` or `makeClient`. Export a raw `makeFoo` factory only when external callers have a concrete, supported need to construct that implementation independently of its Layers; test setup and composition convenience are not sufficient evidence.
 
 Choose the Layer constructor that matches acquisition: `Layer.succeed` for an existing value, `Layer.sync` for lazy synchronous construction, and `Layer.effect` for effectful acquisition. Use `Layer.effectContext` when one acquisition intentionally supplies several tags, especially a production service and its test-control service. Use `Layer.unwrap` when configuration or runtime discovery builds the Layer. Use `Layer.fresh` or `Effect.provide(layer, { local: true })` only when an operation or test requires isolated acquisition. Reserve `Context.Reference` for ambient runtime values with a safe, truthful default.
 
@@ -141,7 +140,7 @@ Name reusable implementations for their observable behavior, such as `InMemoryCa
 Complete when:
 
 - the service-or-value decision cites production ownership or variability and the rejected alternative;
-- every applicable interface, tag, construction effect, expected error, method, production Layer, and reusable test implementation has exactly one owner;
+- every applicable interface, tag, construction effect, expected error, method, production Layer, and reusable test implementation has exactly one owner, and every raw construction factory remains private unless a concrete external caller requires direct construction;
 - stable runtime capabilities and implementation dependencies are captured during Layer construction, operation-specific capability values remain explicit inputs, scoped context is yielded where used, and requirements remain visible until the module that selects an implementation provides them;
 - each Layer constructor matches acquisition, each provided dependency is an implementation the provider truthfully owns, and long-lived work is scoped;
 - public and non-trivial service operations have named boundaries, with whole-operation concerns applied at those boundaries;
