@@ -1,0 +1,4 @@
+interface:
+  display_name: "React Standards"
+  short_description: "Apply production React UI standards."
+  default_prompt: "Use $react-standards to implement or review this React change using the repository's conventions."
