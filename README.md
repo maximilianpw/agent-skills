@@ -24,10 +24,13 @@ npx skills update --global
 
 ## Skills
 
+- `effect-standards` — production Effect standards, including focused Alchemy runtime and infrastructure guidance.
 - `model-routing` — select models for workflows, subagents, and independent reviews.
 - `remote-development` — operate remote development machines through the Fleet CLI.
-- `typescript-standards` — pragmatic TypeScript standards with Effect guidance gated per package or explicit request.
+- `typescript-standards` — pragmatic production TypeScript standards, independent of any framework.
 - `write-discoverable-code` — make names, modules, errors, and events easy to find through search.
+
+Pi can also load this repository directly as a package because `package.json` exposes `skills/` through `pi.skills`.
 
 ## Layout
 

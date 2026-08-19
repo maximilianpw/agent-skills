@@ -1,0 +1,14 @@
+{
+  "name": "@maximilianpw/agent-skills",
+  "version": "0.0.0",
+  "private": true,
+  "keywords": [
+    "agent-skills",
+    "pi-package"
+  ],
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}

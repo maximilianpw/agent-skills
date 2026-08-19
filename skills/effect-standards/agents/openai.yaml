@@ -1,0 +1,4 @@
+interface:
+  display_name: "Effect Standards"
+  short_description: "Apply production Effect and Alchemy standards."
+  default_prompt: "Use $effect-standards to implement or review this Effect or Alchemy change using the pinned package versions and repository conventions."

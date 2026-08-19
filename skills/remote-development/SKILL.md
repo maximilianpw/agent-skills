@@ -7,7 +7,7 @@ description: Operate trusted remote development machines through the Fleet CLI. 
 
 ## Start Here
 
-1. Run `fleet list`.
+1. Run `fleet` or `fleet list`. Read `Current machine` before choosing a destination; select a different host for remote work.
 2. Read `~/.config/fleet/FLEET.md` completely. It is the authoritative generated contract for available hosts, aliases, capabilities, and placement rules.
 3. Select a host based on the declared OS, role, GUI availability, enrollment, and `longRunningAgents` capability. Do not assume host capabilities from memory.
 

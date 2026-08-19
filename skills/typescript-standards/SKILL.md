@@ -1,6 +1,6 @@
 ---
 name: typescript-standards
-description: Pragmatic TypeScript standards for production code. Use when designing, implementing, refactoring, or reviewing non-trivial TypeScript; apply Effect guidance only where the affected package already uses Effect or the user requests it.
+description: Pragmatic TypeScript standards for production code. Use when designing, implementing, refactoring, or reviewing non-trivial TypeScript, including types, errors, async behavior, boundaries, services, persistence, and tests.
 license: MIT
 ---
 
@@ -10,16 +10,9 @@ Build TypeScript that makes invalid data, recoverable errors, and side-effect ow
 
 For trivial or mechanical edits, match the surrounding code and stop; that completes this workflow. Do not turn a focused task into a standards migration.
 
-## Select the guidance branch
+## Establish the local rules
 
-Inspect the nearest package manifest, TypeScript configuration, repository instructions, and affected imports before designing the change.
-
-Use **standard TypeScript** by default. Load [`references/effect.md`](references/effect.md) only when:
-
-- the affected package declares `effect` and the changed area already uses it; or
-- the user explicitly asks to introduce or use Effect.
-
-A dependency elsewhere in a monorepo is not enough. In a mixed repository, apply Effect conventions only inside the Effect-owned boundary. Do not introduce Effect into ordinary TypeScript merely because it is available or preferred in another project.
+Inspect the nearest package manifest, TypeScript configuration, repository instructions, affected imports, and nearby tests before designing the change. Identify the compiler options, runtime, schema or validation library, error conventions, persistence approach, and test runner that govern the changed package.
 
 ## Trace the changed behavior
 
