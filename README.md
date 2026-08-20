@@ -26,6 +26,7 @@ npx skills update --global
 
 - `effect-standards` — production Effect standards, including focused Alchemy runtime and infrastructure guidance.
 - `model-routing` — select models for workflows, subagents, and independent reviews.
+- `nestjs-standards` — production NestJS standards for modules, HTTP boundaries, security, testing, and operations.
 - `react-standards` — production React UI standards, including TanStack and Vite guidance.
 - `remote-development` — operate remote development machines through the Fleet CLI.
 - `typescript-standards` — pragmatic production TypeScript standards, independent of any framework.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "NestJS Standards"
+  short_description: "Apply production NestJS standards."
+  default_prompt: "Use $nestjs-standards to implement or review this NestJS change using the installed versions and repository conventions."
