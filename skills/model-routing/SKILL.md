@@ -53,8 +53,8 @@ Start unfamiliar code task classes with Grok. Start unfamiliar product, domain, 
 
 ### Grok family
 
-- **Grok 4.6 through Cursor:** default owner for code-centric planning, implementation, refactoring, reproducible debugging, tests, code review, and verification. Give it the goal, constraints, invariants, and acceptance checks, then let it complete the engineering loop.
-- **Grok 4.6 `:slow`:** cost-saving lane for unattended, long-running work where latency does not matter, such as overnight migrations, broad refactors, test generation, and repository-wide verification. Treat serving speed and reasoning effort as separate choices.
+- **Grok 4.6 through CLIProxyAPI:** default owner for code-centric planning, implementation, refactoring, reproducible debugging, tests, code review, and verification. Give it the goal, constraints, invariants, and acceptance checks, then let it complete the engineering loop.
+- Use Pi's reasoning-effort setting to match the task difficulty; CLIProxyAPI exposes Grok 4.6 reasoning levels from `low` through `xhigh`.
 
 ### Independent review
 
