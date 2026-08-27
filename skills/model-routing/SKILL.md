@@ -23,6 +23,19 @@ Scores are routing priors, not benchmark measurements. Grok's strong coding eval
 
 For work that ships, prioritize the dimension the task exercises. User-facing UI, copy, and API design require taste of at least 7; implementation correctness favors code quality and objective verification.
 
+## Check availability
+
+Before each delegation batch, run:
+
+```bash
+cliproxyapi-util quota --json 2>/dev/null || bun "$HOME/pi-config/cli/cliproxyapi-util.ts" quota --json
+```
+
+- Remove `unavailable` families.
+- Keep `available` and `unknown` families in table order.
+- Choose the first remaining model.
+- If the check fails, use the table as-is. If an `unknown` model fails, try the next one.
+
 ## Route by responsibility
 
 | responsibility | route |
