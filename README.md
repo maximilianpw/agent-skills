@@ -27,9 +27,11 @@ npx skills update --global
 - `effect-standards` — production Effect standards, including focused Alchemy runtime and infrastructure guidance.
 - `model-routing` — select models for workflows, subagents, and independent reviews.
 - `nestjs-standards` — production NestJS standards for modules, HTTP boundaries, security, testing, and operations.
+- `project-verification` — create or maintain a project-local harness and feature map that prove behavior on the real user surface.
 - `react-standards` — production React UI standards, including TanStack and Vite guidance.
 - `remote-development` — operate remote development machines through the Fleet CLI.
 - `typescript-standards` — pragmatic production TypeScript standards, independent of any framework.
+- `update-upstream-skills` — check every adapted skill against its attributed upstream and review all changes without overwriting local decisions.
 - `write-discoverable-code` — make names, modules, errors, and events easy to find through search.
 
 Pi can also load this repository directly as a package because `package.json` exposes `skills/` through `pi.skills`.
@@ -55,3 +57,5 @@ This repository contains static skill files and has no runtime service or deploy
 Each first-party skill lives under `skills/<name>/` and follows the [Agent Skills specification](https://agentskills.io/specification).
 
 Third-party skills are not vendored here. Install them from their upstream repositories with the Skills CLI so their source and update history remain intact. Adapted work retains its upstream license and attribution inside the skill directory.
+
+`upstream-skills.json` inventories adapted skills and their source paths. Run `npm run check:upstreams` or invoke `update-upstream-skills` to check every attribution pin and exact-copy file for drift.

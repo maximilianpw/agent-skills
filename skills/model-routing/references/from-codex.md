@@ -1,8 +1,7 @@
 # Delegate from Codex to Claude
 
-Use this adapter after `model-routing` selects a Claude model while the current harness is Codex.
+Use this adapter when Codex cannot select the routed Claude model natively.
 
-- Invoke Claude non-interactively with `claude -p --model <model>`.
-- Use `opus` or `sonnet` according to the model selected by the routing rules.
-- Ask for critique or structured recommendations by default. Request edits only in an isolated worktree or for a tightly scoped patch.
+- Run `claude -p --model opus` only for the architecture or design work routed to Opus.
+- Request critique or structured recommendations by default. Request edits only for a tightly scoped patch or isolated worktree.
 - Use `--output-format json` or `--json-schema` when the caller needs structured output.
