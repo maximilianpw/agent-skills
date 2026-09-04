@@ -6,6 +6,9 @@
     "agent-skills",
     "pi-package"
   ],
+  "scripts": {
+    "check": "node --test scripts/validate-skills.test.mjs && node scripts/validate-skills.mjs"
+  },
   "pi": {
     "skills": [
       "./skills"
