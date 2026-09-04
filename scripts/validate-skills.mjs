@@ -1,4 +1,4 @@
-import { lstat, readFile, readdir } from "node:fs/promises";
+import { lstat, readFile, readdir, realpath } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -93,7 +93,7 @@ function parseInterfacePrompt(file, text, failures) {
     }
     const value = match[1].trim();
     const quoted = value.match(/^(["'])(.*)\1$/u)?.[2];
-    if (!value || quoted === "" || /^[|>]/u.test(value) || /^(?:null|~)$/iu.test(value) || (/^["']/u.test(value) && quoted === undefined)) {
+    if (!value || quoted === "" || /^[|>[{]/u.test(value) || /^(?:null|~)$/iu.test(value) || (/^["']/u.test(value) && quoted === undefined)) {
       failures.push(`${file}: interface.default_prompt must use a non-empty single-line scalar`);
       continue;
     }
@@ -119,6 +119,7 @@ export async function validateRepository(root) {
 
   for (const skillName of skillDirectories) {
     const skillDirectory = path.join(skillsDirectory, skillName);
+    const realSkillDirectory = await realpath(skillDirectory);
     const skillFile = path.join(skillDirectory, "SKILL.md");
     if (!(await isPresent(skillFile))) {
       failures.push(`${relative(skillFile)}: missing skill entrypoint`);
@@ -159,9 +160,24 @@ export async function validateRepository(root) {
       for (const match of markdown.matchAll(markdownLinkPattern)) {
         const target = match[1].trim();
         if (target.startsWith("#") || /^[a-z][a-z0-9+.-]*:/i.test(target)) continue;
-        const linkedPath = path.resolve(path.dirname(markdownFile), decodeURIComponent(target.split("#", 1)[0]));
+        let decodedTarget;
+        try {
+          decodedTarget = decodeURIComponent(target.split("#", 1)[0]);
+        } catch (error) {
+          failures.push(`${relative(markdownFile)}: invalid encoded relative link ${target} (${error.message})`);
+          continue;
+        }
+        const linkedPath = path.resolve(path.dirname(markdownFile), decodedTarget);
         const packagedPath = path.relative(skillDirectory, linkedPath);
-        if (packagedPath === ".." || packagedPath.startsWith(`..${path.sep}`) || path.isAbsolute(packagedPath) || !(await isPresent(linkedPath))) {
+        let realLinkedPath;
+        try {
+          realLinkedPath = await realpath(linkedPath);
+        } catch (error) {
+          if (error.code !== "ENOENT") throw error;
+        }
+        const realPackagedPath = realLinkedPath && path.relative(realSkillDirectory, realLinkedPath);
+        const leavesPackage = (candidate) => candidate === ".." || candidate.startsWith(`..${path.sep}`) || path.isAbsolute(candidate);
+        if (leavesPackage(packagedPath) || !realLinkedPath || leavesPackage(realPackagedPath)) {
           failures.push(`${relative(markdownFile)}: missing packaged relative link ${target}`);
         }
       }

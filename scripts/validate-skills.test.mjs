@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, rm, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -79,6 +79,19 @@ test("rejects metadata overflow and counts physical entrypoint lines", async () 
 test("rejects broken packaged links", async () => {
   const result = await validateFixture({ body: "Read [missing](references/missing.md)." });
   assert.match(result.failures.join("\n"), /missing packaged relative link/);
+  const malformed = await validateFixture({ body: "Read [invalid](references/%GG.md)." });
+  assert.match(malformed.failures.join("\n"), /invalid encoded relative link/);
+});
+
+test("rejects relative links whose symlink target leaves the skill package", async () => {
+  const root = await fixture({ body: "Read [outside](references/outside.md)." });
+  try {
+    await writeFile(path.join(root, "outside.md"), "# Outside\n");
+    await symlink(path.join(root, "outside.md"), path.join(root, "skills", "testing-things", "references", "outside.md"));
+    assert.match((await validateRepository(root)).failures.join("\n"), /missing packaged relative link/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });
 
 test("ignores links inside variable-length fenced code blocks", async () => {
@@ -124,4 +137,6 @@ test("scopes default_prompt to interface and rejects unsupported values", async 
   assert.match(quotedEmpty.failures.join("\n"), /default_prompt must use a non-empty single-line scalar/);
   const multiline = await validateFixture({ agentText: "interface:\n  default_prompt: |\n    Use $testing-things.\n" });
   assert.match(multiline.failures.join("\n"), /default_prompt must use a non-empty single-line scalar/);
+  const flow = await validateFixture({ agentText: "interface:\n  default_prompt: [Use $testing-things]\n" });
+  assert.match(flow.failures.join("\n"), /default_prompt must use a non-empty single-line scalar/);
 });
