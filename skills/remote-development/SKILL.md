@@ -1,6 +1,6 @@
 ---
 name: remote-development
-description: Operate trusted remote development machines through the Fleet CLI. Use when selecting a remote host, running remote checks or agents, opening SSH/tmux sessions, forwarding ports, or connecting to T3 Code.
+description: Operate trusted remote development machines through the Fleet CLI. Use when selecting a remote host, running remote checks or agents, opening SSH/tmux sessions, copying files, forwarding ports, or connecting to T3 Code.
 ---
 
 # Remote Development
@@ -18,6 +18,7 @@ description: Operate trusted remote development machines through the Fleet CLI. 
   remote work and project ports. The remote tmux session survives disconnects;
   a port maps to itself and `local:remote` remaps it.
 - Use `fleet shell <host>` for a plain interactive shell.
+- Use `fleet copy <source> <destination>` to copy one file between the current machine and a declared remote host. A bare destination host copies into the remote user's home directory; use `HOST:PATH` for explicit placement or as the source when pulling. Run `fleet copy --help` for examples and limitations.
 - Use `fleet forward <host> <local-port> <remote-port> [remote-host]` for local port forwarding.
 - Use `fleet forward list` to inspect forwards and `fleet forward delete <pid>` to stop them.
 - Use `fleet t3 <host> [local-port]` when the selected host declares T3 Code support.
