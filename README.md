@@ -24,12 +24,18 @@ npx skills update --global
 
 ## Skills
 
+- `code-review` — review one fixed change independently against repository standards and its originating spec.
+- `cua-helium` — operate Helium on macOS or Linux through the local Cua Driver computer server.
+- `domain-modeling` — sharpen project terminology and record qualifying architecture decisions.
 - `effect-standards` — production Effect standards, including focused Alchemy runtime and infrastructure guidance.
+- `grill-with-docs` — run a grilling session while updating the domain glossary and ADRs.
+- `grilling` — stress-test a plan or design through frontier rounds of related questions.
 - `model-routing` — select models for workflows, subagents, and independent reviews.
 - `nestjs-standards` — production NestJS standards for modules, HTTP boundaries, security, testing, and operations.
 - `project-verification` — create or maintain a project-local harness and feature map that prove behavior on the real user surface.
 - `react-standards` — production React UI standards, including TanStack and Vite guidance.
 - `remote-development` — operate remote development machines through the Fleet CLI.
+- `tdd` — run a practical red-green loop with before/after evidence.
 - `typescript-standards` — pragmatic production TypeScript standards, independent of any framework.
 - `update-upstream-skills` — check every adapted skill against its attributed upstream and review all changes without overwriting local decisions.
 - `write-discoverable-code` — make names, modules, errors, and events easy to find through search.
@@ -38,7 +44,7 @@ Pi can also load this repository directly as a package because `package.json` ex
 
 ## Requirements
 
-`model-routing` expects CLIProxyAPI and its documented `pi-config` fallback. `remote-development` expects the personal Fleet CLI and generated Fleet configuration. These integrations are deliberate prerequisites, not bundled services.
+`cua-helium` expects Helium, the upstream `cua-driver` skill, and either the `computer` MCP server from `pi-config` or the `cua-driver` CLI. `model-routing` expects CLIProxyAPI and its documented `pi-config` fallback. `remote-development` expects the personal Fleet CLI and generated Fleet configuration. These integrations are deliberate prerequisites, not bundled services.
 
 ## Development
 
