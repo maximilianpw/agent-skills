@@ -6,6 +6,8 @@ license: MIT
 
 # Model routing
 
+Choose the model here. The caller's policy decides whether work stays in the current thread, uses a subagent, or runs in Herdr.
+
 Choose by responsibility. Objective verification lowers the need for expensive judgment.
 
 ## Grading

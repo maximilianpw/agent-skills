@@ -16,6 +16,20 @@ List the available skills without installing them:
 npx skills add maximilianpw/agent-skills --list
 ```
 
+Install the upstream Matt Pocock skills used alongside this collection:
+
+```bash
+npx skills add mattpocock/skills --global \
+  --skill code-review \
+  --skill domain-modeling \
+  --skill grilling \
+  --yes
+
+npx skills add https://github.com/cursor/plugins/tree/main/pstack/skills/tdd \
+  --global \
+  --yes
+```
+
 Update installed skills:
 
 ```bash
@@ -24,27 +38,22 @@ npx skills update --global
 
 ## Skills
 
-- `code-review` — review one fixed change independently against repository standards and its originating spec.
+- `cloudflare-composition-root` — keep Cloudflare bindings, runtime lifetimes, and platform types at their owning boundaries.
 - `cua-helium` — operate Helium on macOS or Linux through the local Cua Driver computer server.
-- `domain-modeling` — sharpen project terminology and record qualifying architecture decisions.
 - `effect-standards` — production Effect standards, including focused Alchemy runtime and infrastructure guidance.
-- `grill-with-docs` — run a grilling session while updating the domain glossary and ADRs.
-- `grilling` — stress-test a plan or design through frontier rounds of related questions.
 - `model-routing` — select models for workflows, subagents, and independent reviews.
 - `nestjs-standards` — production NestJS standards for modules, HTTP boundaries, security, testing, and operations.
 - `project-verification` — create or maintain a project-local harness and feature map that prove behavior on the real user surface.
 - `react-standards` — production React UI standards, including TanStack and Vite guidance.
 - `remote-development` — operate remote development machines through the Fleet CLI.
-- `tdd` — run a practical red-green loop with before/after evidence.
 - `typescript-standards` — pragmatic production TypeScript standards, independent of any framework.
-- `update-upstream-skills` — check every adapted skill against its attributed upstream and review all changes without overwriting local decisions.
 - `write-discoverable-code` — make names, modules, errors, and events easy to find through search.
 
 Pi can also load this repository directly as a package because `package.json` exposes `skills/` through `pi.skills`.
 
 ## Requirements
 
-`cua-helium` expects Helium, the upstream `cua-driver` skill, and either the `computer` MCP server from `pi-config` or the `cua-driver` CLI. `model-routing` expects CLIProxyAPI and its documented `pi-config` fallback. `remote-development` expects the personal Fleet CLI and generated Fleet configuration. These integrations are deliberate prerequisites, not bundled services.
+`cua-helium` expects Helium, the upstream `cua-driver` skill, and either the `computer` MCP server from `pi-config` or the `cua-driver` CLI. `model-routing` expects CLIProxyAPI and its documented `pi-config` fallback. `remote-development` expects the personal Fleet CLI and generated Fleet configuration. Matt Pocock's `code-review`, `domain-modeling`, and `grilling` skills are installed directly from [`mattpocock/skills`](https://github.com/mattpocock/skills), and pstack's `tdd` skill is installed directly from [`cursor/plugins`](https://github.com/cursor/plugins/tree/main/pstack/skills/tdd), rather than being republished here. These integrations are deliberate prerequisites, not bundled services.
 
 ## Development
 
@@ -60,8 +69,8 @@ This repository contains static skill files and has no runtime service or deploy
 
 ## Layout
 
-Each first-party skill lives under `skills/<name>/` and follows the [Agent Skills specification](https://agentskills.io/specification).
+Each public skill lives under `skills/<name>/` and follows the [Agent Skills specification](https://agentskills.io/specification).
 
 Third-party skills are not vendored here. Install them from their upstream repositories with the Skills CLI so their source and update history remain intact. Adapted work retains its upstream license and attribution inside the skill directory.
 
-`upstream-skills.json` inventories adapted skills and their source paths. Run `npm run check:upstreams` or invoke `update-upstream-skills` to check every attribution pin and exact-copy file for drift.
+`upstream-skills.json` inventories adapted skills and their source paths. Run `npm run check:upstreams` or use the repository-local `update-upstream-skills` skill to check every attribution pin and exact-copy file for drift. The maintenance skill lives under `.agents/skills/`, is marked internal for the Skills CLI, and is not part of this package's public skill inventory.

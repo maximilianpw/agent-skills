@@ -2,45 +2,19 @@
   "version": 1,
   "skills": [
     {
-      "localSkill": "code-review",
-      "attribution": "skills/code-review/ATTRIBUTION.md",
-      "repository": "https://github.com/mattpocock/skills.git",
+      "localSkill": "cloudflare-composition-root",
+      "attribution": "skills/cloudflare-composition-root/ATTRIBUTION.md",
+      "repository": "https://github.com/dmmulroy/.dotfiles.git",
       "ref": "main",
-      "pinnedCommit": "3cca18b368ae95cdbdebbff572ccafa662551015",
+      "pinnedCommit": "fcdf06013853c2e8e5718b620d3a2b481fbcedb9",
       "upstreamPaths": [
-        "skills/engineering/code-review"
+        "home/.agents/skills/cloudflare-composition-root"
       ],
       "licensePaths": [
-        "LICENSE"
+        "LICENSE",
+        "home/.agents/skills/cloudflare-composition-root/LICENSE"
       ],
       "exactFiles": []
-    },
-    {
-      "localSkill": "domain-modeling",
-      "attribution": "skills/domain-modeling/ATTRIBUTION.md",
-      "repository": "https://github.com/mattpocock/skills.git",
-      "ref": "main",
-      "pinnedCommit": "3cca18b368ae95cdbdebbff572ccafa662551015",
-      "upstreamPaths": [
-        "skills/engineering/domain-modeling"
-      ],
-      "licensePaths": [
-        "LICENSE"
-      ],
-      "exactFiles": [
-        {
-          "upstream": "skills/engineering/domain-modeling/CONTEXT-FORMAT.md",
-          "local": "skills/domain-modeling/CONTEXT-FORMAT.md"
-        },
-        {
-          "upstream": "skills/engineering/domain-modeling/ADR-FORMAT.md",
-          "local": "skills/domain-modeling/ADR-FORMAT.md"
-        },
-        {
-          "upstream": "skills/engineering/domain-modeling/agents/openai.yaml",
-          "local": "skills/domain-modeling/agents/openai.yaml"
-        }
-      ]
     },
     {
       "localSkill": "effect-standards",
@@ -56,44 +30,6 @@
         "home/.agents/skills/coding-standards/LICENSE"
       ],
       "exactFiles": []
-    },
-    {
-      "localSkill": "grill-with-docs",
-      "attribution": "skills/grill-with-docs/ATTRIBUTION.md",
-      "repository": "https://github.com/mattpocock/skills.git",
-      "ref": "main",
-      "pinnedCommit": "3cca18b368ae95cdbdebbff572ccafa662551015",
-      "upstreamPaths": [
-        "skills/engineering/grill-with-docs"
-      ],
-      "licensePaths": [
-        "LICENSE"
-      ],
-      "exactFiles": [
-        {
-          "upstream": "skills/engineering/grill-with-docs/agents/openai.yaml",
-          "local": "skills/grill-with-docs/agents/openai.yaml"
-        }
-      ]
-    },
-    {
-      "localSkill": "grilling",
-      "attribution": "skills/grilling/ATTRIBUTION.md",
-      "repository": "https://github.com/mattpocock/skills.git",
-      "ref": "main",
-      "pinnedCommit": "3cca18b368ae95cdbdebbff572ccafa662551015",
-      "upstreamPaths": [
-        "skills/productivity/grilling"
-      ],
-      "licensePaths": [
-        "LICENSE"
-      ],
-      "exactFiles": [
-        {
-          "upstream": "skills/productivity/grilling/agents/openai.yaml",
-          "local": "skills/grilling/agents/openai.yaml"
-        }
-      ]
     },
     {
       "localSkill": "project-verification",
@@ -122,20 +58,6 @@
           "local": "skills/project-verification/references/feature-map-example/search.md"
         }
       ]
-    },
-    {
-      "localSkill": "tdd",
-      "attribution": "skills/tdd/ATTRIBUTION.md",
-      "repository": "https://github.com/cursor/plugins.git",
-      "ref": "main",
-      "pinnedCommit": "5bf2b1544db739998121a306340631963c2ff3de",
-      "upstreamPaths": [
-        "pstack/skills/tdd"
-      ],
-      "licensePaths": [
-        "pstack/LICENSE"
-      ],
-      "exactFiles": []
     },
     {
       "localSkill": "write-discoverable-code",

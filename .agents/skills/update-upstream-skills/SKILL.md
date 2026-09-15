@@ -1,6 +1,8 @@
 ---
 name: update-upstream-skills
-description: Audit upstream-skills.json in the maximilianpw/agent-skills repository, checking attributed pstack, dmmulroy, and other adaptations against upstream. Use when maintaining this repository and asked for a full refresh of its upstream-derived skills.
+description: Audit this repository's upstream-derived skills against upstream-skills.json. Use when maintaining this repository's adapted skill pins or checking them for upstream drift.
+metadata:
+  internal: true
 ---
 
 # Update upstream skills
@@ -14,7 +16,7 @@ Maintain adapted skills against their upstream sources without replacing local d
 3. Run:
 
    ```bash
-   python3 skills/update-upstream-skills/scripts/check_upstreams.py
+   python3 .agents/skills/update-upstream-skills/scripts/check_upstreams.py
    ```
 
    Exit `0` means every tracked upstream path matches its reviewed pin and every exact-copy file matches upstream. Exit `1` means review is required. Exit `2` means the check itself failed.

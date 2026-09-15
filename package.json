@@ -8,8 +8,8 @@
   ],
   "scripts": {
     "check": "node --test scripts/validate-skills.test.mjs && node scripts/validate-skills.mjs",
-    "check:upstreams": "python3 skills/update-upstream-skills/scripts/check_upstreams.py",
-    "test:upstreams": "python3 -m unittest skills/update-upstream-skills/scripts/test_check_upstreams.py"
+    "check:upstreams": "python3 .agents/skills/update-upstream-skills/scripts/check_upstreams.py",
+    "test:upstreams": "python3 .agents/skills/update-upstream-skills/scripts/test_check_upstreams.py"
   },
   "pi": {
     "skills": [

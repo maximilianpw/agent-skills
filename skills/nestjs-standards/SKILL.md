@@ -1,6 +1,6 @@
 ---
 name: nestjs-standards
-description: Production NestJS standards for modules, dependency injection, controllers, DTO validation, request lifecycle, security, persistence, testing, and operations. Use when designing, implementing, refactoring, or reviewing non-trivial NestJS code, including Express and Fastify applications.
+description: Production NestJS standards for modules, dependency injection, controllers, DTO validation, request lifecycle, security, persistence, testing, and operations. Use for non-trivial NestJS applications, including Nest applications using Express or Fastify adapters.
 license: MIT
 ---
 

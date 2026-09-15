@@ -1,6 +1,6 @@
 ---
 name: project-verification
-description: Generate or maintain a project-local verification skill that drives your app the way a user does, keeps its feature map honest, and captures real evidence. Use when a project has no scripted way to prove UI, CLI, or service behavior, or when an existing verification skill may have drifted.
+description: Generate or maintain a project-local verification skill that drives the app through its real user surface, keeps a feature map honest, and captures evidence. Use when the user asks to create, repair, or refresh that verification workflow.
 license: MIT (see ATTRIBUTION.md)
 ---
 
