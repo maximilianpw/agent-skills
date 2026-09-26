@@ -28,7 +28,7 @@ Load the references that match the change:
 
 - [`references/types.md`](references/types.md) for signatures, domain types, state models, assertions, exports, and compiler settings.
 - [`references/failures.md`](references/failures.md) for absence, errors, promises, cancellation, retries, and resource cleanup.
-- [`references/boundaries.md`](references/boundaries.md) for parsing, dependencies, services, adapters, persistence, configuration, security, and observability.
+- [`references/boundaries.md`](references/boundaries.md) for parsing, scoped module placement, repeated service behavior, dependencies, adapters, persistence, configuration, security, and observability.
 - [`references/testing.md`](references/testing.md) whenever behavior or a public contract changes.
 
 ## Design from the caller inward
