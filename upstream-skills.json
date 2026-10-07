@@ -6,7 +6,7 @@
       "attribution": "skills/cloudflare-composition-root/ATTRIBUTION.md",
       "repository": "https://github.com/dmmulroy/.dotfiles.git",
       "ref": "main",
-      "pinnedCommit": "fcdf06013853c2e8e5718b620d3a2b481fbcedb9",
+      "pinnedCommit": "4035e4211d962ced3164c95270b0d82826608ae9",
       "upstreamPaths": [
         "home/.agents/skills/cloudflare-composition-root"
       ],
@@ -21,7 +21,7 @@
       "attribution": "skills/effect-standards/ATTRIBUTION.md",
       "repository": "https://github.com/dmmulroy/.dotfiles.git",
       "ref": "main",
-      "pinnedCommit": "fcdf06013853c2e8e5718b620d3a2b481fbcedb9",
+      "pinnedCommit": "4035e4211d962ced3164c95270b0d82826608ae9",
       "upstreamPaths": [
         "home/.agents/skills/coding-standards"
       ],
