@@ -1,6 +1,6 @@
 # Effect configuration
 
-This reference covers Effect `Config` recipes, providers, and config-backed Layers. For configuration ownership, startup failure handling, and resource lifecycle, also apply [`configuration-and-resources.md`](configuration-and-resources.md).
+This reference covers Effect `Config` recipes, providers, and config-backed Layers. For configuration ownership, startup failure handling, and resource lifecycle, also apply [`configuration-and-resources.md`](../configuration-and-resources.md).
 
 Install environment-backed providers at the composition root, then read typed runtime configuration through Effect `Config` recipes.
 

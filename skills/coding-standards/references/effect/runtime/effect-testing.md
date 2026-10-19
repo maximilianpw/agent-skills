@@ -1,6 +1,6 @@
 # Effect testing
 
-Apply the test levels, observable-outcome rules, and completion check in [`testing.md`](testing.md) to every Effect test. This reference adds Effect runtime, time, synchronization, and test-Layer rules.
+Apply the test levels, observable-outcome rules, and completion check in [`testing.md`](../testing.md) to every Effect test. This reference adds Effect runtime, time, synchronization, and test-Layer rules.
 
 ## Defaults
 
@@ -105,4 +105,4 @@ For tests that provide runtime configuration or choose whether to exercise Confi
 
 ## Completion check
 
-The completion check in [`testing.md`](testing.md#completion-check) passes; the test runtime matches the behavior under test; every temporal test drives time with `TestClock`, with sleeping effects started before the clock advances; concurrent readiness and ordering use explicit synchronization; reusable test implementations cross the production service tag while test controls remain on the test-control tag; observable interruption and finalization contracts are asserted; and every applicable service, retry/schedule, and configuration pointer above has been followed.
+The completion check in [`testing.md`](../testing.md#completion-check) passes; the test runtime matches the behavior under test; every temporal test drives time with `TestClock`, with sleeping effects started before the clock advances; concurrent readiness and ordering use explicit synchronization; reusable test implementations cross the production service tag while test controls remain on the test-control tag; observable interruption and finalization contracts are asserted; and every applicable service, retry/schedule, and configuration pointer above has been followed.

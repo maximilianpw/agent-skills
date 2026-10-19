@@ -10,6 +10,8 @@ Plain-text search is the cheapest lookup tool and works across languages, tools,
 
 ## Respect the codebase
 
+Load `coding-standards` for shared implementation and ownership rules when creating, moving, renaming, or splitting files. If unavailable, follow repository policy and report that gap.
+
 Repository conventions, linters, language idioms, and framework-mandated names win. Apply these rules to code being created or intentionally refactored, not as permission for unrelated repository-wide cleanup.
 
 Do not rename a published API, wire field, database column, telemetry identifier, feature flag, or localization key as a side effect. Use the compatibility or deprecation mechanism appropriate to that boundary.

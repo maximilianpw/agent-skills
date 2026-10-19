@@ -20,7 +20,7 @@ Guidance:
 
 - Add `.annotate({ identifier: "User" })` only when tooling consumes it: HTTP API, RPC, OpenAPI/JSON Schema, docs, diagnostics, or codegen.
 - Use the owning constructor to establish new constraints; prefer `schema.makeEffect(...)` when failure belongs in the Effect channel and `schema.make(...)` only where its throwing behavior is appropriate.
-- Apply [`parsing-and-schemas.md#provenance`](parsing-and-schemas.md#provenance) to decide whether validation is needed, then choose the API below. An established domain value needs neither another decoder nor a ceremonial constructor.
+- Apply [`parsing-and-schemas.md#provenance`](../parsing-and-schemas.md#provenance) to decide whether validation is needed, then choose the API below. An established domain value needs neither another decoder nor a ceremonial constructor.
 
 ## Decoder Selection And Public Parsers
 
@@ -89,7 +89,7 @@ Guidance:
 
 ## Optionality And Defaults
 
-Apply [`domain-types-and-state.md`](domain-types-and-state.md) to decide domain optionality. Represent the encoded contract precisely:
+Apply [`domain-types-and-state.md`](../domain-types-and-state.md) to decide domain optionality. Represent the encoded contract precisely:
 
 - Use `Schema.optionalKey(...)` for absent JSON/storage keys.
 - Use `Schema.optional(...)` only when explicit `undefined` is part of the contract.
@@ -98,7 +98,7 @@ Apply [`domain-types-and-state.md`](domain-types-and-state.md) to decide domain 
 
 ## Nominal Values
 
-Apply [`domain-types-and-state.md`](domain-types-and-state.md) to decide which values require brands or refinements.
+Apply [`domain-types-and-state.md`](../domain-types-and-state.md) to decide which values require brands or refinements.
 
 - Implement scalar IDs and value objects as constrained branded schemas.
 - Apply normal schema constraints before `Schema.brand(...)` for most code.
@@ -147,7 +147,7 @@ Guidance:
 
 ## Errors
 
-Apply [`errors.md`](errors.md) to error meaning, context, translation, and recovery. Schema tagged errors are the class exception for typed Effect failures. The example uses `Schema.TaggedError`; older v4 prereleases expose `Schema.TaggedErrorClass` instead. Use the constructor exported by the pinned package.
+Apply [`errors.md`](../errors.md) to error meaning, context, translation, and recovery. Schema tagged errors are the class exception for typed Effect failures. The example uses `Schema.TaggedError`; older v4 prereleases expose `Schema.TaggedErrorClass` instead. Use the constructor exported by the pinned package.
 
 ```ts
 export class PersistenceError extends Schema.TaggedError<PersistenceError>()(
@@ -163,8 +163,8 @@ export class PersistenceError extends Schema.TaggedError<PersistenceError>()(
 Guidance:
 
 - Use schema unions for public API or transport error surfaces.
-- `Schema.Defect()` represents defect-like payloads; it does not redact them. Keep raw causes internal and apply [sensitive-data policy](sensitive-data-and-observability.md) before reporting or serialization.
+- `Schema.Defect()` represents defect-like payloads; it does not redact them. Keep raw causes internal and apply [sensitive-data policy](../sensitive-data-and-observability.md) before reporting or serialization.
 
 ## Completion Check
 
-Every changed Effect data model uses the selected record or variant representation; every reused field preserves the same meaning; every encoded optional or nullish state is intentional; every default produces a required normalized value; every decoder matches the actual encoded input and failure policy; each public parser exposes only intentional inputs/options; additional cross-field and computed invariants retain runtime evidence; and every serialized error surface follows [`errors.md`](errors.md).
+Every changed Effect data model uses the selected record or variant representation; every reused field preserves the same meaning; every encoded optional or nullish state is intentional; every default produces a required normalized value; every decoder matches the actual encoded input and failure policy; each public parser exposes only intentional inputs/options; additional cross-field and computed invariants retain runtime evidence; and every serialized error surface follows [`errors.md`](../errors.md).

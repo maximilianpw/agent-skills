@@ -1,6 +1,6 @@
 # Effect services
 
-Apply [`modules-services-and-adapters.md`](modules-services-and-adapters.md) for ownership and Adapter decisions.
+Apply [`modules-services-and-adapters.md`](../modules-services-and-adapters.md) for ownership and Adapter decisions.
 
 Treat a service as an **authority seam**: a cohesive capability whose requirements propagate through Effect context. The application capability module owns its interface, tag, and expected errors. Each concrete implementation owner keeps its construction and applicable production or reusable test Layers with that implementation.
 
@@ -26,7 +26,7 @@ A service seam represents real ownership or variability in production. When inje
 
 ## Authority and requirements
 
-The application module identified by [`modules-services-and-adapters.md`](modules-services-and-adapters.md) owns the capability's interface and tag. A technology Adapter owns its concrete construction and Layers only after translation, mechanics, reuse, or real implementation variation earns that seam. The composition root selects top-level concrete Layers; a service module assembles only dependency implementations it truthfully owns. Reusable policy remains in its owning application service.
+The application module identified by [`modules-services-and-adapters.md`](../modules-services-and-adapters.md) owns the capability's interface and tag. A technology Adapter owns its concrete construction and Layers only after translation, mechanics, reuse, or real implementation variation earns that seam. The composition root selects top-level concrete Layers; a service module assembles only dependency implementations it truthfully owns. Reusable policy remains in its owning application service.
 
 Yield stable runtime capabilities and implementation dependencies while building the Layer and close over them in service methods. Yield request-, fiber-, or operation-scoped context inside the method that uses it. Let requirements propagate until the module that truthfully chooses an implementation provides them.
 
@@ -115,7 +115,7 @@ const readAttachment = Effect.fn("Attachment.read")(
 )
 ```
 
-For operation-labelled boundary errors, a shared curried mapper earns its place when callers share the complete error meaning and it retains exact error/requirement types. Apply [boundary translation](errors.md#boundary-translation) before choosing it; use explicit tagged cases when failures need distinct policies:
+For operation-labelled boundary errors, a shared curried mapper earns its place when callers share the complete error meaning and it retains exact error/requirement types. Apply [boundary translation](../errors.md#boundary-translation) before choosing it; use explicit tagged cases when failures need distinct policies:
 
 ```ts
 const persistenceError = operationError(PersistenceError.make)

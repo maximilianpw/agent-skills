@@ -15,7 +15,7 @@ Cloudflare entrypoint
   -> protocol result
 ```
 
-For Effect or Alchemy code, also read and apply the `effect-standards` skill, especially its Alchemy, service, resource-lifetime, error, and testing references. This skill owns the Cloudflare-specific boundary audit; `effect-standards` owns the Effect implementation shape.
+Load `coding-standards` for shared coding rules and its Effect/Alchemy branch when that stack is used. This skill owns the Cloudflare boundary audit; the companion owns implementation shape. If it is unavailable, follow repository policy and report that gap.
 
 ## 1. Classify the runtime surface
 

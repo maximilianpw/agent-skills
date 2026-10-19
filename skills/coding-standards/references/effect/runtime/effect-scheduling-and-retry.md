@@ -19,7 +19,7 @@ Use `Schedule` to express retry, polling, pacing, and repeated background work.
 - Retry only at the narrowest boundary with proven idempotency.
 - Keep exhausted failures visible unless the boundary has a truthful fallback.
 
-When retries can duplicate side effects, read [`workflows-transactions-and-idempotency.md`](workflows-transactions-and-idempotency.md) to choose the retry owner and safety guarantee.
+When retries can duplicate side effects, read [`workflows-transactions-and-idempotency.md`](../workflows-transactions-and-idempotency.md) to choose the retry owner and safety guarantee.
 
 ## Polling Workers
 

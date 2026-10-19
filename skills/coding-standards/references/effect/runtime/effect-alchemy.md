@@ -2,7 +2,7 @@
 
 Use this reference when changing an Alchemy Worker, Durable Object, Workflow, binding-backed service, or other two-phase Effectful Constructor.
 
-Also apply [`effect-services.md`](effect-services.md) for service and Layer ownership, [`configuration-and-resources.md`](configuration-and-resources.md) for lifetimes, and [`modules-services-and-adapters.md`](modules-services-and-adapters.md) for composition-root boundaries.
+Also apply [`effect-services.md`](effect-services.md) for service and Layer ownership, [`configuration-and-resources.md`](../configuration-and-resources.md) for lifetimes, and [`modules-services-and-adapters.md`](../modules-services-and-adapters.md) for composition-root boundaries.
 
 ## Verify the pinned Alchemy model
 

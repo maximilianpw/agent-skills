@@ -55,7 +55,7 @@ Expected failures use custom tagged errors, generally extending:
 
 - `Error`;
 - `TaggedError` from `better-result`;
-- the pinned Effect Schema tagged-error constructor; see [Effect schema errors](effect-schema-and-data.md#errors) for version-specific naming.
+- the pinned Effect Schema tagged-error constructor; see [Effect schema errors](runtime/effect-schema-and-data.md#errors) for version-specific naming.
 
 A custom error includes:
 

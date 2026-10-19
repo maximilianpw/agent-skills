@@ -21,7 +21,7 @@ Each HTTP boundary operation should be a named Effect that owns the complete pro
 - translate transport, status, and decode failures into typed application errors;
 - apply the operation's retry and rate-limit policy.
 
-Place these protocol mechanics in an outbound Adapter or a private concrete client. Application services call that boundary and own application policy. Keep database transaction scopes limited to database work. Read [`modules-services-and-adapters.md`](modules-services-and-adapters.md) when deciding whether a separate Adapter is earned, and [`workflows-transactions-and-idempotency.md`](workflows-transactions-and-idempotency.md) when an HTTP operation can repeat or interacts with a transaction.
+Place these protocol mechanics in an outbound Adapter or a private concrete client. Application services call that boundary and own application policy. Keep database transaction scopes limited to database work. Read [`modules-services-and-adapters.md`](../modules-services-and-adapters.md) when deciding whether a separate Adapter is earned, and [`workflows-transactions-and-idempotency.md`](../workflows-transactions-and-idempotency.md) when an HTTP operation can repeat or interacts with a transaction.
 
 ## Effect HttpClient
 
@@ -83,8 +83,8 @@ For raw-fetch boundaries:
 
 - Pass the `AbortSignal` from `Effect.tryPromise` to `fetch`.
 - Classify HTTP status before decoding a successful payload.
-- Decode unknown response bodies with Schema at the boundary. Read [`parsing-and-schemas.md`](parsing-and-schemas.md) when defining the response representation or its application/domain translation.
-- Retain provider evidence needed for diagnosis as safe structured fields. Read [`sensitive-data-and-observability.md`](sensitive-data-and-observability.md) when requests, responses, or diagnostics may contain secrets or personal data.
+- Decode unknown response bodies with Schema at the boundary. Read [`parsing-and-schemas.md`](../parsing-and-schemas.md) when defining the response representation or its application/domain translation.
+- Retain provider evidence needed for diagnosis as safe structured fields. Read [`sensitive-data-and-observability.md`](../sensitive-data-and-observability.md) when requests, responses, or diagnostics may contain secrets or personal data.
 
 ## Completion Check
 

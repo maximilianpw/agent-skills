@@ -39,21 +39,18 @@ npx skills update --global
 ## Skills
 
 - `cloudflare-composition-root` — keep Cloudflare bindings, runtime lifetimes, and platform types at their owning boundaries.
+- `coding-standards` — shared engineering rules with conditional TypeScript, Effect/Alchemy, React, and NestJS references.
 - `cua-helium` — operate Helium on macOS or Linux through the local Cua Driver computer server.
-- `effect-standards` — production Effect standards, including focused Alchemy runtime and infrastructure guidance.
 - `model-routing` — select models for workflows, subagents, and independent reviews.
-- `nestjs-standards` — production NestJS standards for modules, HTTP boundaries, security, testing, and operations.
 - `project-verification` — create or maintain a project-local harness and feature map that prove behavior on the real user surface.
-- `react-standards` — production React UI standards, including TanStack and Vite guidance.
 - `remote-development` — operate remote development machines through the Fleet CLI.
-- `typescript-standards` — pragmatic production TypeScript standards, independent of any framework.
 - `write-discoverable-code` — make names, modules, errors, and events easy to find through search.
 
 Pi can also load this repository directly as a package because `package.json` exposes `skills/` through `pi.skills`.
 
 ## Requirements
 
-`cua-helium` expects Helium, the upstream `cua-driver` skill, and either the `computer` MCP server from `pi-config` or the `cua-driver` CLI. `model-routing` expects CLIProxyAPI and its documented `pi-config` fallback. `remote-development` expects the personal Fleet CLI and generated Fleet configuration. Matt Pocock's `code-review`, `domain-modeling`, and `grilling` skills are installed directly from [`mattpocock/skills`](https://github.com/mattpocock/skills), and pstack's `tdd` skill is installed directly from [`cursor/plugins`](https://github.com/cursor/plugins/tree/main/pstack/skills/tdd), rather than being republished here. These integrations are deliberate prerequisites, not bundled services.
+`cua-helium` expects Helium, the upstream `cua-driver` skill, and either the `computer` MCP server from `pi-config` or the `cua-driver` CLI. `model-routing` expects CLIProxyAPI and its documented `pi-config` fallback. `remote-development` expects the personal Fleet CLI and generated Fleet configuration. Matt Pocock's `code-review`, `domain-modeling`, and `grilling` skills are installed directly from [`mattpocock/skills`](https://github.com/mattpocock/skills), and pstack's `tdd` skill is installed directly from [`cursor/plugins`](https://github.com/cursor/plugins/tree/main/pstack/skills/tdd), rather than being republished here. `cloudflare-composition-root` and `write-discoverable-code` use `coding-standards` for shared coding rules; install it alongside either skill. Working agreements and execution permissions belong to the consuming agent's global/repository policy, not this package. These integrations are deliberate prerequisites, not bundled services.
 
 ## Development
 
