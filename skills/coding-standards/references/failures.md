@@ -20,6 +20,7 @@ Throw when an invariant is broken. Recoverable errors may also throw when the su
 - Translate SDK, database, and protocol failures inside the adapter that owns that dependency.
 - Preserve a useful cause when translation would otherwise destroy diagnostic context.
 - Catch only when adding policy, translation, cleanup, or context. Do not catch merely to log and rethrow the same error.
+- Shape failures that reach external callers with [`public-errors.md`](public-errors.md).
 
 ## Absence
 

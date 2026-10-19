@@ -27,6 +27,8 @@ Load each matching reference once. Follow its conditional links only when their 
 - [Comments and documentation](references/comments-and-docs.md): adding or changing comments, docstrings, or docs.
 - [Boundaries and ownership](references/boundaries.md): external data, dependencies, package boundaries, configuration, persistence, security, or side effects.
 - [Failures and async work](references/failures.md): errors, absence, concurrency, cancellation, retries, or resource cleanup.
+- [Public errors](references/public-errors.md): failures reaching HTTP/RPC, CLI, or SDK callers.
+- [API contracts](references/api-contracts.md): HTTP routes, schemas, or generated OpenAPI.
 - [Testing](references/testing.md): behavior or public-contract changes.
 
 Use the repository's language and decoder library. TypeScript examples in shared references illustrate the contract, not a requirement to adopt TypeScript.

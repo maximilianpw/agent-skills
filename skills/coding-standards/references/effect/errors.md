@@ -101,6 +101,14 @@ Use `Effect.mapError` or a shared error mapper when the complete input error cha
 
 For documentation of expected typed failures, describe outcomes rather than using `@throws`. Reserve `@throws` for defects, framework-required throwing, or temporary `notYetImplemented` paths. Shared [comment rules](../comments-and-docs.md) still apply.
 
+## Public error schemas
+
+When a failure reaches an external caller, apply [public errors](../public-errors.md) for messages, envelope, retryability, redaction, and status. In Effect:
+
+- Declare one public schema-backed tagged error per public variant, each with a literal `code`, its own `details` schema, and its HTTP status set through the pinned `HttpApi` annotation. List the variants in each endpoint's error schemas, so the contract and the generated OpenAPI agree.
+- Translate internal errors to public variants in the handler with `Effect.catchTags`, one case per known tag. A new internal tag then fails to compile until it has a public decision.
+- Take `requestId` from the request-correlation middleware the handler already runs under; the same ID annotates the trace span.
+
 ## Completion check
 
-Every applicable rule above has been checked: each known failure is represented by a granular typed error or explicitly classified as a defect; throws and rejections are reserved for defects; absence has the intended optional or typed not-found meaning; error types own stable, searchable literal message prefixes and safe structured context; operation error unions remain precise; third-party rejections are translated by their owner; outer boundaries translate expected failures into valid outcomes; failure classification uses tags and fields; translation preserves already-correct errors and handles each known source meaning explicitly; and defects, interruption, and uncertain remote outcomes retain their distinctions.
+Every applicable rule above has been checked: each public failure has a schema-backed variant with a literal code, per-variant details, and a declared status, translated by explicit tag; each known failure is represented by a granular typed error or explicitly classified as a defect; throws and rejections are reserved for defects; absence has the intended optional or typed not-found meaning; error types own stable, searchable literal message prefixes and safe structured context; operation error unions remain precise; third-party rejections are translated by their owner; outer boundaries translate expected failures into valid outcomes; failure classification uses tags and fields; translation preserves already-correct errors and handles each known source meaning explicitly; and defects, interruption, and uncertain remote outcomes retain their distinctions.
