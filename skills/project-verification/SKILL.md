@@ -6,6 +6,8 @@ license: MIT (see ATTRIBUTION.md)
 
 # Project verification
 
+Local verification does not authorize pushing, publishing a PR, deploying, changing shared infrastructure or live data, or destructive operations. Obtain explicit authorization for those actions; use isolated local data for verification. Unattended runs must not read `.env` or `.env.*`, and unapproved operations are out of scope.
+
 Choose one branch:
 
 - **Create** when the project has no usable verification skill.
@@ -31,20 +33,20 @@ If the checkout doesn't build or start as-is, fix that first (or report it preci
 
 Write `verify-<app>/SKILL.md` inside the repository's existing project-local skill directory. If none exists, use the active harness's project path: `.pi/skills/` for Pi, `.claude/skills/` for Claude Code, and `.agents/skills/` for Cursor or Codex. Keep one canonical copy. Write YAML frontmatter (`name: verify-<app>` and a `description` that names the app, the surface, and when to reach for it; without frontmatter the skill never registers) and these sections, each grounded in what the interview actually found (no placeholders left):
 
-- **Launch:** the exact command that starts the app for verification, and how to tell it's ready (a log line, a port answering, a prompt). Include teardown. For a short-lived CLI or TUI there is no server to keep alive: launch means build the binary (or install deps) once, then start each drive in its own isolated PTY or tmux session.
+- **Launch:** the exact command that starts the app for verification, and how to tell it's ready (a log line, a prompt). Launch must reach a usable state from an empty, isolated data directory, including migrations and seed data. Ready means usable, not merely that a process answers: a database health check can pass while initialization is still running. Include teardown. For a short-lived CLI or TUI there is no server to keep alive: launch means build the binary (or install deps) once, then start each drive in its own isolated PTY or tmux session.
 - **Doctor:** one read-only check that answers "is this instance worth driving?": process up, right version/build, port owned by us, auth valid. An agent runs this first whenever anything looks off.
 - **Drive:** the harness recipe with real selectors/commands from this repo, not examples. Prefer stable handles (ARIA labels, data attributes, prompt strings, route paths) over coordinates and tab order.
-- **Evidence:** what to capture for a proof and where it goes. State the proof standards: exercise the real user path, not internal setters or test-only endpoints; capture the action and the resulting state, not just the final screen; verify side effects (files written, rows inserted, messages sent) alongside what's visible; mocks only where a production boundary already isolates the external system. When the safe path is a dry-run or test mode, verify what it actually skips by observing (files, network, git refs) rather than trusting its name: some dry-runs still touch the network or open a browser.
+- **Evidence:** what to capture for a proof and where it goes, outside the repository or in a git-ignored folder. State the proof standards: exercise the real user path, not internal setters or test-only endpoints; capture the action and the resulting state, not just the final screen; verify side effects (files written, rows inserted, messages sent) alongside what's visible; mocks only where a production boundary already isolates the external system. When the safe path is a dry-run or test mode, verify what it actually skips by observing (files, network, git refs) rather than trusting its name: some dry-runs still touch the network or open a browser.
 - **Cleanup:** how to tear down instances the run created. Never kill by process name; kill what you started. Cleanup removes instances and scratch state, never the evidence: proof artifacts survive the teardown, in a location the skill names.
 - **Helpers:** any script the skill ships is executable and its invocation is shown in the skill body. A helper the reader has to reverse-engineer is not a helper.
 
 ### 3. Seed the feature map
 
-Create `features/README.md` inside the generated skill plus one file per user-facing feature you can identify (aim for the top 3-5 to start, from routes, commands, menus, or docs). Follow the shape in [`references/feature-map-example/`](references/feature-map-example/), with a README index and one file per feature. Each file answers, from the user's point of view: what the feature is, how to reach it, how to drive it with the harness, and what observable end state proves it works. The four H2s are `Sub-features`, `How to get to it (user POV)`, `Driving it with <harness>`, and `Gotchas`. The map is the repo's maintained verification source; a proof that drives one convenient entry point is incomplete when the map lists others.
+Create `features/README.md` inside the generated skill plus one file per user-facing feature you can identify (aim for the top 3-5 to start, from routes, commands, menus, or docs). Follow the shape in [`references/feature-map-example/`](references/feature-map-example/), with a README index and one file per feature. Each file answers, from the user's point of view: what the feature is, how to reach it, how to drive it with the harness, and what observable end state proves it works. The four H2s are `Sub-features`, `How to get to it (user POV)`, `Driving it with <harness>`, and `Gotchas`. If seed data lacks a prerequisite a journey needs, report that journey as failed and record the reason in its `Gotchas`; never weaken the journey to make it pass. The map is the repo's maintained verification source; a proof that drives one convenient entry point is incomplete when the map lists others.
 
 ### 4. Prove the generated skill before handing it over
 
-Run its own instructions end to end once: launch, doctor, drive ONE mapped feature (one is enough; the map exists so later runs can cover the rest), capture evidence, clean up. After cleanup, confirm the evidence still exists at the named location. A cleanup that eats the proof fails this step. Fix what fails, and run the generated cleanup after every failed iteration too, so broken attempts don't strand processes and ports. A generated skill that was never executed is a draft, not a deliverable.
+Run its own instructions end to end once: launch, doctor, drive ONE mapped feature (one is enough; the map exists so later runs can cover the rest), capture evidence, clean up. After cleanup, confirm the evidence still exists at the named location. A cleanup that eats the proof fails this step. Fix what fails, and run the generated cleanup after every failed iteration too, so broken attempts don't strand processes and ports. A generated skill that was never executed is a draft, not a deliverable. If verification used a stand-in for the real target (a container instead of a fresh VM, or a local rather than remote stack), list every setup step the stand-in supplied that the target will not. Those steps remain unverified until a run on the real target covers them.
 
 ### 5. Offer the maintenance loop
 
@@ -59,7 +61,7 @@ A feature map rots the moment the app changes. This branch is the upkeep loop fo
 Pick one, and say which:
 
 - **clean:** every feature got source and live coverage; nothing worth shipping. No branch, no PR.
-- **changed:** one PR ships proven doc, harness, or map corrections.
+- **changed:** proven doc, harness, or map corrections are ready locally; publish one PR only when explicitly authorized.
 - **blocked:** coverage could not finish or a proven fix could not ship safely. Say exactly what blocked it.
 
 ### Edit scope
@@ -80,6 +82,6 @@ Only edit the verification skill's own directory (its SKILL.md, features/, and a
 
 5. **Triage.** Wrong or missing user-POV description means doc drift, fix it. Working behavior the harness can't drive means a harness gap, fix it; a harness fix follows the same helpers rule as generation (scripts executable, invocation documented in the skill body). App behavior that's actually broken means a product gap; record it for the user, keep it out of this change.
 
-6. **Ship or stop.** For changed: one PR of proven corrections, re-read every changed file first. For clean or blocked: no PR, report the outcome and the coverage honestly.
+6. **Ship or stop.** For changed: re-read every changed file and prepare proven corrections locally; publish one PR only with explicit authorization. For clean or blocked: no PR, report the outcome and the coverage honestly.
 
 Keep concise run notes (features covered, unreachable prerequisites, confirmed drift, outcome) in a scratch location; don't commit them.
