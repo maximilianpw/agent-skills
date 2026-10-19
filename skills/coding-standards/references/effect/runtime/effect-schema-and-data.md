@@ -95,6 +95,7 @@ Apply [`domain-types-and-state.md`](../domain-types-and-state.md) to decide doma
 - Use `Schema.optional(...)` only when explicit `undefined` is part of the contract.
 - Use `Schema.NullOr`, `Schema.UndefinedOr`, or `Schema.NullishOr` only when nullish values are part of the encoded contract.
 - Keep normalized defaulted values as required fields and apply defaults in constructors/decoding.
+- Decode optional and nullable encoded fields to `Option` on the decoded side with the pinned Schema's Option transformations, so application code never sees `?:`, `null`, or `undefined`.
 
 ## Nominal Values
 

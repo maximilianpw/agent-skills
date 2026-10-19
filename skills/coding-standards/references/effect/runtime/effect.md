@@ -20,12 +20,39 @@ Read every branch that matches the changed behavior:
 - Outgoing HTTP, Effect `HttpClient`, status handling, or HTTP rate limiting: [`effect-http-clients.md`](effect-http-clients.md).
 - Effect tests, time, sleeps, concurrency synchronization, fakes, or test Layers: [`effect-testing.md`](effect-testing.md).
 
+## Code style
+
+Business logic goes inside a generator; cross-cutting policy wraps it from outside.
+
+| Concern | Form |
+| --- | --- |
+| Dependency retrieval, sequential steps, branching, loops, early return | `Effect.gen` or a generator-based `Effect.fn` |
+| Error translation, retry, timeout, tracing, logging annotations, provision, Layer composition | `.pipe(...)`, or `Effect.fn` whole-function transforms |
+| One pure result transform | `.pipe(Effect.map(...))` |
+| Several dependent `map` / `flatMap` / `andThen` steps | Rewrite as a generator so intermediate values and control flow are named |
+
+```ts
+const fetchUserPosts = Effect.fn("UserPosts.fetch")(
+  function* (userId: UserId) {
+    const cached = yield* cache.getUserPosts(userId);
+    if (Option.isSome(cached)) return cached.value;
+
+    const posts = yield* database.findPostsByUser(userId);
+    yield* cache.setUserPosts(userId, posts);
+    return posts;
+  },
+  Effect.retry(userPostsRetryPolicy),
+);
+```
+
+A yielded Effect may keep a local `.pipe(...)` for one error translation or result transform. Once that pipe coordinates further Effects or branches on domain outcomes, move the coordination into the generator.
+
 ## Cross-cutting defaults
 
-- Compose workflows with `Effect.gen(function* () { ... })` and the project's established `Effect.fn` patterns.
+- Compose workflows with `Effect.gen(function* () { ... })` and the project's established `Effect.fn` patterns, following the code-style table above.
 - Recover from the typed error channel at the narrowest boundary with a truthful response; preserve defects and interruption.
 - Use native Effect workflows. Isolate unavoidable Promise or platform APIs in their owning Adapter.
 
 ## Completion check
 
-Every matching branch has been read, every chosen Effect API has been verified in the pinned package source, and every cross-cutting default has been checked against each changed Effect path. Report any exception with concrete evidence.
+Every matching branch has been read, every chosen Effect API has been verified in the pinned package source, every changed workflow follows the code-style table, and every cross-cutting default has been checked against each changed Effect path. Report any exception with concrete evidence.

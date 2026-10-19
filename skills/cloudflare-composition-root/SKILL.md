@@ -1,6 +1,6 @@
 ---
 name: cloudflare-composition-root
-description: Compose Cloudflare Workers, Durable Objects, Queues, scheduled handlers, and binding-backed services without leaking raw runtime capabilities into application code. Use when adding or refactoring Cloudflare bindings, entrypoints, runtime lifetimes, or D1, R2, KV, Queue, Durable Object, Workflow, or service-binding integration.
+description: Compose Cloudflare Workers, Durable Objects, Queues, scheduled handlers, and binding-backed services without leaking raw runtime capabilities into application code. Use when adding or refactoring Cloudflare bindings, entrypoints, runtime lifetimes, Alchemy stages, or D1, R2, KV, Queue, Durable Object, Workflow, or service-binding integration.
 ---
 
 # Cloudflare Composition Roots
@@ -16,6 +16,8 @@ Cloudflare entrypoint
 ```
 
 Load `coding-standards` for shared coding rules and its Effect/Alchemy branch when that stack is used. This skill owns the Cloudflare boundary audit; the companion owns implementation shape. If it is unavailable, follow repository policy and report that gap.
+
+When an Alchemy Stack, stage, or shared-infrastructure resource changes, also read [`references/stage-isolation.md`](references/stage-isolation.md).
 
 ## 1. Classify the runtime surface
 

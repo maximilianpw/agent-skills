@@ -16,6 +16,8 @@ Construct branded/refined values through parsers or smart constructors, then pas
 
 Push optionality outward. Branch or parse before calling a function that requires a value.
 
+Inside the application, represent every optional field, property, parameter, and return value as `Option.Option<A>`. Nullable or absent external input decodes into `Option` at its boundary, and encodes back to `null`, `undefined`, or an omitted key only where an external contract requires that representation. See [optionality and defaults](runtime/effect-schema-and-data.md#optionality-and-defaults) for the encoded side.
+
 Use `Partial<T>` only when partiality is the actual domain concept. Define explicit operation inputs otherwise.
 
 Keep the primary domain input positional. Add a named options object when real callers select related policies or names prevent argument-order mistakes. Each option must change caller-required behavior; zero/one-input operations stay simple. Library parse options remain private unless the public contract deliberately needs them, as described in [parser APIs](parsing-and-schemas.md#parser-apis).
@@ -58,7 +60,7 @@ Complete when every changed domain value, operation input, and state concern is 
 
 - each identifier, mixable unit, and constrained scalar has a parser or smart constructor that establishes its invariant;
 - each remaining primitive has no domain invariant or mix-up risk that warrants a domain type;
-- optionality is resolved before required calls, and each `Partial<T>` represents actual domain partiality;
+- optionality is resolved before required calls, every in-application optional value is an `Option`, and each `Partial<T>` represents actual domain partiality;
 - each call keeps its primary input obvious, and every additional option has consumer evidence and exposes actual policy or prevents order mistakes;
 - each lifecycle representation permits exactly its valid data, operations, and transitions;
 - each closed union is handled exhaustively, and each open external protocol has an explicit, tested unknown-variant policy; and
