@@ -25,7 +25,7 @@ These are mechanism choices, not instructions to enable new rules automatically.
 
 ## Verify policy changes
 
-Use the lint tool's real rule-test harness and exercise the actual root configuration, not a duplicated approximation of it. Include import/export aliases, accepted domain code, unrelated same-name APIs, and false-positive boundaries. For a numeric ceiling, test an accepted boundary and a rejected value immediately above it.
+Ship each custom rule with a colocated test covering passing and failing cases. Use the lint tool's real rule-test harness and exercise the actual root configuration, not a duplicated approximation of it. Include import/export aliases, accepted domain code, unrelated same-name APIs, and false-positive boundaries. For a numeric ceiling, test an accepted boundary and a rejected value immediately above it.
 
 If maintained plugin sources or installer assets are excluded from ordinary application lint/format, verify those owned copies explicitly. Keep distribution identity checks separate from project-only tooling tests.
 

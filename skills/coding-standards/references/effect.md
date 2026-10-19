@@ -19,8 +19,6 @@ Inspect the pinned package versions and local service, schema, error, and test c
 - [Lint policy](effect/lint-and-policy.md): lint configuration, custom rules, or prevention tooling.
 - [Imports and exports](effect/imports-exports-and-files.md): Effect imports or public entrypoints.
 
-- [Comments and JSDoc](effect/comments-and-jsdoc.md): exported symbols, comments, and rendered errors.
-
 ## Effect-specific decisions
 
 Expected failures are values; defects remain distinct. Parse external representations at their owner, preserve established evidence inward, and establish newly computed invariants through constructors or refinements. Keep meaningful service interfaces explicit, with Layers owning implementation and resources. Test through real services and faithful implementations, not module mocks.

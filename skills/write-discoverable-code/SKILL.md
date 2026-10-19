@@ -10,7 +10,7 @@ Plain-text search is the cheapest lookup tool and works across languages, tools,
 
 ## Respect the codebase
 
-Load `coding-standards` for shared implementation and ownership rules when creating, moving, renaming, or splitting files. If unavailable, follow repository policy and report that gap.
+Load `coding-standards` when creating, moving, renaming, or splitting files; its file-layout and restructure references own placement and move verification. It is a companion skill; if unavailable, follow repository policy and report that gap.
 
 Repository conventions, linters, language idioms, and framework-mandated names win. Apply these rules to code being created or intentionally refactored, not as permission for unrelated repository-wide cleanup.
 
@@ -28,7 +28,7 @@ Do not rename a published API, wire field, database column, telemetry identifier
 ## Put context where search lands
 
 - Document a public symbol when its type cannot express a critical constraint such as units, timezone, ordering, ownership, mutation, or side effects.
-- Include the natural-language phrase people are likely to search when the identifier's casing or terminology would hide it.
+- When a comment is needed for a non-obvious contract, include the natural-language phrase people are likely to search if identifier casing or terminology would hide it. Prefer a searchable name over a comment added only for search.
 - Skip comments that merely restate a self-explanatory signature. A stale comment is worse than no comment.
 - Keep stable event names, error codes, flags, and protocol identifiers as complete literals in a searchable definition. Construction may be dynamic, but the supported vocabulary should be findable verbatim when practical.
 - Begin operational error messages with a stable, specific phrase so a log excerpt leads back to its origin. Keep variable context in structured fields or after that prefix.

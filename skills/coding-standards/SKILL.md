@@ -22,6 +22,9 @@ Load each matching reference once. Follow its conditional links only when their 
 
 ### Shared concerns
 
+- [File layout and naming](references/file-layout.md): writing or substantially changing code, naming files, or organizing test support.
+- [Safe restructures](references/restructuring.md): moving, renaming, or merging files.
+- [Comments and documentation](references/comments-and-docs.md): adding or changing comments, docstrings, or docs.
 - [Boundaries and ownership](references/boundaries.md): external data, dependencies, package boundaries, configuration, persistence, security, or side effects.
 - [Failures and async work](references/failures.md): errors, absence, concurrency, cancellation, retries, or resource cleanup.
 - [Testing](references/testing.md): behavior or public-contract changes.

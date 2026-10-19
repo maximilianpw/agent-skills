@@ -1,4 +1,4 @@
-# Testing TypeScript behavior
+# Testing behavior
 
 ## Test through meaningful interfaces
 
@@ -20,6 +20,10 @@ Use module mocks when the repository convention or boundary makes them the clear
 - Control time and randomness rather than sleeping or relying on wall-clock timing.
 - Test cancellation, timeout, retry exhaustion, and partial side effects when the changed operation owns those policies.
 - For a bug fix, demonstrate that the test fails on the original behavior and passes with the fix when doing so is practical.
+
+## Test schemas by what they add
+
+A plain struct, brand, or union declaration is its own specification, and the schema library owns its decoding. Test a schema when it carries application-owned behavior: a transformation, normalization, custom filter, compatibility contract, encode/decode round trip, or a previously regressed edge case. When a parse failure produces a caller-visible outcome, test it through the boundary's public interface.
 
 ## Keep types honest
 

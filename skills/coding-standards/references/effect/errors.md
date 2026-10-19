@@ -99,6 +99,8 @@ Translate only at the owner that knows the protocol or recovery policy. For a ta
 
 Use `Effect.mapError` or a shared error mapper when the complete input error channel intentionally has one meaning. A generic helper must preserve safe context and concrete error/requirement types, rather than collapsing distinct failures for convenience. Defects and interruption remain distinct from expected failures; cause-level recovery belongs to an explicit supervision boundary. A lost mutation response carries uncertainty, not proof of failure; apply [workflow safety](workflows-transactions-and-idempotency.md#uncertain-outcomes-and-compensation).
 
+For documentation of expected typed failures, describe outcomes rather than using `@throws`. Reserve `@throws` for defects, framework-required throwing, or temporary `notYetImplemented` paths. Shared [comment rules](../comments-and-docs.md) still apply.
+
 ## Completion check
 
 Every applicable rule above has been checked: each known failure is represented by a granular typed error or explicitly classified as a defect; throws and rejections are reserved for defects; absence has the intended optional or typed not-found meaning; error types own stable, searchable literal message prefixes and safe structured context; operation error unions remain precise; third-party rejections are translated by their owner; outer boundaries translate expected failures into valid outcomes; failure classification uses tags and fields; translation preserves already-correct errors and handles each known source meaning explicitly; and defects, interruption, and uncertain remote outcomes retain their distinctions.
