@@ -23,7 +23,7 @@ Do not rename a published API, wire field, database column, telemetry identifier
 - Stop when the name plus its visible module or package context is unambiguous. Flat-import ecosystems often need context in the symbol; path-qualified ecosystems should avoid stuttering.
 - Keep one authoritative definition for a behavior. Move and delete rather than copying implementations between homes.
 - Rename when a private behavior's meaning or audience changes. For stable external contracts, preserve compatibility and point to the replacement.
-- Avoid bare role names such as `utils.ts`, `helpers.ts`, or `types.ts` when several domains could produce the same search hit. Name files you are free to name after the concept they own. Framework names such as `page.tsx`, `route.ts`, `mod.rs`, or `conftest.py` are not violations.
+- Name files you are free to name after the concept they own, so a search for the base name lands on one file: `tag-schemas.ts` returns one hit. Bare role names (`utils.ts`, `helpers.ts`, `types.ts`) and role names repeated across feature folders (`tags/schemas.ts`, `sites/schemas.ts`) return many. Framework names such as `page.tsx`, `route.ts`, `mod.rs`, or `conftest.py` are not violations.
 
 ## Put context where search lands
 

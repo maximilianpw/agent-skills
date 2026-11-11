@@ -55,6 +55,10 @@ Keep the current model while failures are concrete and each iteration makes meas
 
 Editing delegates share the current worktree unless isolated. Give one editing agent ownership of a worktree; use isolated worktrees for parallel editors. Ask for a report when the delegate only analyzes or reviews.
 
+## Council defaults
+
+For the `council` skill, use **Opus 5.5 (Anthropic) and GPT-6 Sol (OpenAI)** at high reasoning effort where supported. These are model families/versions, not hardcoded API IDs; resolve them through the host's model catalog. Honor user-named members. If a seat is unavailable, report it and ask before substituting rather than silently running a smaller panel. The council skill owns review budgets and reconciliation; this section owns the default roster.
+
 ## Cross-harness delegation
 
 Use native model selection when the harness supports it. Otherwise load the matching adapter:

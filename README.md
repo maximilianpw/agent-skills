@@ -38,12 +38,19 @@ npx skills update --global
 
 ## Skills
 
+- `babysit-pr` — monitor CI and review feedback with a bounded, resumable PR watcher.
 - `cloudflare-composition-root` — keep Cloudflare bindings, runtime lifetimes, and platform types at their owning boundaries.
 - `coding-standards` — shared engineering rules with conditional TypeScript, Effect/Alchemy, React, and NestJS references.
+- `council` — gather independent reviews from two model providers within a fixed round budget.
 - `cua-helium` — operate Helium on macOS or Linux through the local Cua Driver computer server.
+- `file-pr` — prepare or publish concise, problem-first PRs under explicit authorization.
+- `leaving-pr-comments` — attribute agent-authored GitHub replies and verify their publication.
 - `model-routing` — select models for workflows, subagents, and independent reviews.
+- `modernize` — reassess an old PR's intent and relevance before rebasing it.
 - `project-verification` — create or maintain a project-local harness and feature map that prove behavior on the real user surface.
 - `remote-development` — operate remote development machines through the Fleet CLI.
+- `sol-loop` — run a bounded Sol review loop with an evidence-backed finding ledger.
+- `takeover` — continue inherited work while preserving intent and contributor credit.
 - `write-discoverable-code` — make names, modules, errors, and events easy to find through search.
 
 Pi can also load this repository directly as a package because `package.json` exposes `skills/` through `pi.skills`.
@@ -51,6 +58,8 @@ Pi can also load this repository directly as a package because `package.json` ex
 ## Requirements
 
 `cua-helium` expects Helium, the upstream `cua-driver` skill, and either the `computer` MCP server from `pi-config` or the `cua-driver` CLI. `model-routing` expects CLIProxyAPI and its documented `pi-config` fallback. `remote-development` expects the personal Fleet CLI and generated Fleet configuration. Matt Pocock's `code-review`, `domain-modeling`, and `grilling` skills are installed directly from [`mattpocock/skills`](https://github.com/mattpocock/skills), and pstack's `tdd` skill is installed directly from [`cursor/plugins`](https://github.com/cursor/plugins/tree/main/pstack/skills/tdd), rather than being republished here. `cloudflare-composition-root` and `write-discoverable-code` use `coding-standards` for shared coding rules; install it alongside either skill. Working agreements and execution permissions belong to the consuming agent's global/repository policy, not this package. These integrations are deliberate prerequisites, not bundled services.
+
+The adapted tstack PR skills use authenticated `gh`; `babysit-pr` also needs Python 3 on macOS/Linux and a cancellable command runner. Install `leaving-pr-comments` alongside `file-pr`, `modernize`, or `babysit-pr`; `takeover` uses all four. `council` and `sol-loop` depend on `model-routing` and a harness capable of read-only delegates on the selected models. The council roster is maintained in `model-routing`, not hardcoded in the workflow. Upstream `full-send` and `full-stop` are intentionally excluded.
 
 ## Development
 

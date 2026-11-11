@@ -2,6 +2,109 @@
   "version": 1,
   "skills": [
     {
+      "localSkill": "babysit-pr",
+      "attribution": "skills/babysit-pr/ATTRIBUTION.md",
+      "repository": "https://github.com/t3dotgg/tstack.git",
+      "ref": "main",
+      "pinnedCommit": "7de017b3fc9d50c03cf3ecb98fb71e0ca65a78bd",
+      "upstreamPaths": [
+        "skills/babysit-pr"
+      ],
+      "licensePaths": [
+        "LICENSE"
+      ],
+      "exactFiles": [
+        {
+          "upstream": "skills/babysit-pr/scripts/pr-wait",
+          "local": "skills/babysit-pr/scripts/pr-wait"
+        }
+      ]
+    },
+    {
+      "localSkill": "council",
+      "attribution": "skills/council/ATTRIBUTION.md",
+      "repository": "https://github.com/t3dotgg/tstack.git",
+      "ref": "main",
+      "pinnedCommit": "7de017b3fc9d50c03cf3ecb98fb71e0ca65a78bd",
+      "upstreamPaths": [
+        "skills/council"
+      ],
+      "licensePaths": [
+        "LICENSE"
+      ],
+      "exactFiles": []
+    },
+    {
+      "localSkill": "file-pr",
+      "attribution": "skills/file-pr/ATTRIBUTION.md",
+      "repository": "https://github.com/t3dotgg/tstack.git",
+      "ref": "main",
+      "pinnedCommit": "7de017b3fc9d50c03cf3ecb98fb71e0ca65a78bd",
+      "upstreamPaths": [
+        "skills/file-pr"
+      ],
+      "licensePaths": [
+        "LICENSE"
+      ],
+      "exactFiles": []
+    },
+    {
+      "localSkill": "leaving-pr-comments",
+      "attribution": "skills/leaving-pr-comments/ATTRIBUTION.md",
+      "repository": "https://github.com/t3dotgg/tstack.git",
+      "ref": "main",
+      "pinnedCommit": "7de017b3fc9d50c03cf3ecb98fb71e0ca65a78bd",
+      "upstreamPaths": [
+        "skills/leaving-pr-comments"
+      ],
+      "licensePaths": [
+        "LICENSE"
+      ],
+      "exactFiles": []
+    },
+    {
+      "localSkill": "modernize",
+      "attribution": "skills/modernize/ATTRIBUTION.md",
+      "repository": "https://github.com/t3dotgg/tstack.git",
+      "ref": "main",
+      "pinnedCommit": "7de017b3fc9d50c03cf3ecb98fb71e0ca65a78bd",
+      "upstreamPaths": [
+        "skills/modernize"
+      ],
+      "licensePaths": [
+        "LICENSE"
+      ],
+      "exactFiles": []
+    },
+    {
+      "localSkill": "sol-loop",
+      "attribution": "skills/sol-loop/ATTRIBUTION.md",
+      "repository": "https://github.com/t3dotgg/tstack.git",
+      "ref": "main",
+      "pinnedCommit": "7de017b3fc9d50c03cf3ecb98fb71e0ca65a78bd",
+      "upstreamPaths": [
+        "skills/sol-loop"
+      ],
+      "licensePaths": [
+        "LICENSE"
+      ],
+      "exactFiles": []
+    },
+    {
+      "localSkill": "takeover",
+      "attribution": "skills/takeover/ATTRIBUTION.md",
+      "repository": "https://github.com/t3dotgg/tstack.git",
+      "ref": "main",
+      "pinnedCommit": "7de017b3fc9d50c03cf3ecb98fb71e0ca65a78bd",
+      "upstreamPaths": [
+        "skills/takeover"
+      ],
+      "licensePaths": [
+        "LICENSE"
+      ],
+      "exactFiles": []
+    },
+    {
       "localSkill": "project-verification",
       "attribution": "skills/project-verification/ATTRIBUTION.md",
       "repository": "https://github.com/cursor/plugins.git",

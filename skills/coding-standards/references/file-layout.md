@@ -14,10 +14,12 @@ Apply this precedence: framework conventions, then runtime boundaries (server, c
 
 ## Names
 
-- Name files after their main export or behavior (`secret-masking.ts`, `UserMenu.tsx`), not their first caller. Preserve repository casing and framework names such as `route.tsx`, `page.tsx`, and `layout.tsx`.
-- Qualify duplicate names when they actually confuse readers. When core and adapter share a concept, the core keeps the noun (`tenant-fan-out.ts`); the adapter takes a verb or qualifier (`run-all-tenants.ts`, `use-tenant-fan-out.ts`).
-- Drop prefixes already supplied by a folder (`auth/login.test.ts`) unless the full name materially improves search.
+- Name files after their main export or behavior (`secret-masking.ts`, `UserMenu.tsx`), not their first caller. When a file has several exports, name their common theme; when they share none, split the file. Preserve repository casing and framework names such as `route.tsx`, `page.tsx`, and `layout.tsx`.
+- Keep base names unique within a package: imports, editor tabs, stack traces, and file search show the base name alone. A role name repeated per feature folder takes its concept, matching the main export: `tags/tag-operations.ts` for `tagOperations`, `tags/tag-schemas.ts` beside it. Framework-mandated names are exempt.
+- When core and adapter share a concept, the core keeps the noun (`tenant-fan-out.ts`); the adapter takes a verb or qualifier (`run-all-tenants.ts`, `use-tenant-fan-out.ts`).
+- Drop a prefix the folder already supplies (`auth/login.test.ts`) when the shorter name stays unique.
 - Name tests after behavior (`checkout-form.test.tsx`), not chronology (`review-fixes.test.tsx`).
+- When fixing names that drifted, add or extend the check that would have caught them: a filename-case lint, or a repository test over base names.
 
 ## Order inside a file
 
