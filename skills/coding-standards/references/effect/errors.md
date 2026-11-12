@@ -6,27 +6,7 @@ Every known failure mode appears in the return type as a custom tagged error, ev
 
 Known failures include domain, parsing, authorization, integration, I/O, persistence, configuration, and workflow failures.
 
-Use, in order:
-
-1. Effect in an Effect codebase.
-2. `better-result` when available.
-3. A small local tagged union:
-
-```ts
-type Result<T, E extends Error> =
-  | { readonly _tag: "ok"; readonly value: T }
-  | { readonly _tag: "err"; readonly error: E };
-```
-
-Prefer:
-
-```ts
-Promise<Result<User, UserLookupError>>
-```
-
-rather than a `Promise<User>` that rejects for ordinary lookup or storage failures.
-
-Promise rejection is equivalent to throwing. The module that directly owns a third-party client—an Adapter or a localized service implementation—catches unclassified rejection and translates it into a known tagged error before it crosses that module's public interface. Rejection may escape application code only for a defect.
+Represent workflow failures in the `E` channel of `Effect.Effect<A, E, R>`, rather than nesting a Result in its success channel or rejecting a Promise. A pure Result-returning decoder remains valid outside that workflow channel. At an unavoidable Promise boundary, the owning Adapter or private service implementation uses the pinned Effect interop API to classify rejection before it crosses the service interface. Preserve interruption and defects rather than translating every cause into an expected failure.
 
 ## Defects
 
@@ -51,15 +31,11 @@ Use `casesHandled` for exhaustive union handling. Keep a defect helper local unt
 
 ## Custom errors
 
-Expected failures use custom tagged errors, generally extending:
-
-- `Error`;
-- `TaggedError` from `better-result`;
-- the pinned Effect Schema tagged-error constructor; see [Effect schema errors](runtime/effect-schema-and-data.md#errors) for version-specific naming.
+Use the pinned Effect Schema tagged-error constructor; see [Effect schema errors](runtime/effect-schema-and-data.md#errors) for version-aware selection and payload handling.
 
 A custom error includes:
 
-- a stable tag using `as const`;
+- a stable tag supplied by the tagged-error constructor;
 - a useful message explaining what failed, why when known, and how to recover when actionable;
 - structured contextual fields with the relevant operation and safe domain/provider data;
 - safe telemetry fields;
@@ -71,24 +47,10 @@ The error that owns a failure constructs its stable message. Begin the message w
 
 Model absence according to the operation's meaning. Return an optional value when missing data is an ordinary result for the caller to interpret. Return a typed not-found error when the operation requires the value or absence violates its local invariant or precondition.
 
-```ts
-export class UserStoreUnavailable extends Error {
-  readonly _tag = "UserStoreUnavailable" as const;
-
-  constructor(
-    readonly operation: "findActiveByEmail",
-    readonly provider: "postgres",
-    readonly cause: unknown,
-  ) {
-    super(`User store unavailable during ${operation}`);
-  }
-}
-```
-
 Keep error unions precise at module boundaries:
 
 ```ts
-Result<User, UserNotFound | UserStoreUnavailable>
+Effect.Effect<User, UserNotFound | UserStoreUnavailable>
 ```
 
 Broad `AppError`-style types belong near entrypoints, orchestration, logging, and rendering layers.
@@ -103,12 +65,12 @@ For documentation of expected typed failures, describe outcomes rather than usin
 
 ## Public error schemas
 
-When a failure reaches an external caller, apply [public errors](../public-errors.md) for messages, envelope, retryability, redaction, and status. In Effect:
+When a failure reaches an external caller, apply [public errors](../public-errors.md) for contract compatibility, messages, retryability, and redaction. For an Effect `HttpApi` boundary:
 
-- Declare one public schema-backed tagged error per public variant, each with a literal `code`, its own `details` schema, and its HTTP status set through the pinned `HttpApi` annotation. List the variants in each endpoint's error schemas, so the contract and the generated OpenAPI agree.
-- Translate internal errors to public variants in the handler with `Effect.catchTags`, one case per known tag. A new internal tag then fails to compile until it has a public decision.
-- Take `requestId` from the request-correlation middleware the handler already runs under; the same ID annotates the trace span.
+- Declare schema-backed public variants matching the established wire contract, or the newly defined public contract when no API exists yet. Use the pinned `HttpApi` annotations for HTTP status and list each variant in the endpoint's error schemas so generated OpenAPI agrees.
+- Translate known internal errors explicitly with `Effect.catchTags`. Leave unhandled tags visible in the inferred error channel until the boundary selects their policy; verify the final handler satisfies the declared API error contract.
+- Reuse the existing correlation context for the public identifier and trace span. CLI and SDK adapters follow their own public contract rather than acquiring an artificial HTTP envelope.
 
 ## Completion check
 
-Every applicable rule above has been checked: each public failure has a schema-backed variant with a literal code, per-variant details, and a declared status, translated by explicit tag; each known failure is represented by a granular typed error or explicitly classified as a defect; throws and rejections are reserved for defects; absence has the intended optional or typed not-found meaning; error types own stable, searchable literal message prefixes and safe structured context; operation error unions remain precise; third-party rejections are translated by their owner; outer boundaries translate expected failures into valid outcomes; failure classification uses tags and fields; translation preserves already-correct errors and handles each known source meaning explicitly; and defects, interruption, and uncertain remote outcomes retain their distinctions.
+For each changed failure path, verify its inferred error union and observable boundary outcome, including redaction and recovery guidance. Adding a known failure must require an explicit boundary decision. Check that interruption, defects, ordinary absence, and uncertain mutation outcomes remain distinguishable rather than becoming a generic error.

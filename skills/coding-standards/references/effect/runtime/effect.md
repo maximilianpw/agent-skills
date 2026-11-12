@@ -1,58 +1,29 @@
 # Effect
 
-These defaults target Effect v4.
-
 ## Source rule
 
-Inspect the project's pinned `effect` package version and source before selecting APIs. Prefer vendored or pinned examples over remembered APIs. Consult current upstream source only when the pinned package does not answer the question.
+These references target Effect v4. Concrete API spellings were checked against Effect 4.1.4 ([source baseline](https://github.com/Effect-TS/effect/tree/3fcc7fa7373a42e29786970a340a06cb587fd7c7)); this is not an instruction to upgrade a project.
+
+Resolve the installed version first. Use that package's agent documentation (`AGENTS.md`, `ai-docs`, or equivalent when present), declarations, and tests for API signatures and examples. If unavailable locally, use official source at the matching release, not unrelated vendored copies or current `main`. The official [agent-documentation source](https://github.com/Effect-TS/effect/tree/3fcc7fa7373a42e29786970a340a06cb587fd7c7/ai-docs/src) and [migration guide](https://github.com/Effect-TS/effect/blob/3fcc7fa7373a42e29786970a340a06cb587fd7c7/MIGRATION.md) are starting points, not substitutes for version matching.
+
+Our preferences for generators, service-module layout, `Option`, and test seams are local conventions, not universal Effect requirements. Apply the repository's explicit policy first; preserve compatible public APIs.
 
 ## Branch chooser
 
-Read every branch that matches the changed behavior:
+Load only branches matching the changed behavior:
 
-- Data models, schemas, brands, variants, optional keys, or decoders: [`effect-schema-and-data.md`](effect-schema-and-data.md).
-- Services, module surfaces, Layers, runtime wiring, `Effect.fn`, or test services: [`effect-services.md`](effect-services.md).
-- Alchemy Workers, Durable Objects, Workflows, bindings, or two-phase Effectful Constructors: [`effect-alchemy.md`](effect-alchemy.md).
-- Runtime config, environment variables, `ConfigProvider`, or `layerConfig`: [`effect-configuration.md`](effect-configuration.md).
-- Retry, repeat, polling, backoff, jitter, rate limits, timeouts, or pass loops: [`effect-scheduling-and-retry.md`](effect-scheduling-and-retry.md).
-- Memoization, TTL caches, concurrent lookup deduplication, or request batching: [`effect-caching.md`](effect-caching.md).
-- Streams, event sources, async iterables, queues, pubsubs, pagination, backpressure, or stream consumers: [`effect-streams.md`](effect-streams.md).
-- Outgoing HTTP, Effect `HttpClient`, status handling, or HTTP rate limiting: [`effect-http-clients.md`](effect-http-clients.md).
-- Effect tests, time, sleeps, concurrency synchronization, fakes, or test Layers: [`effect-testing.md`](effect-testing.md).
+- Models, codecs, brands, variants, or optional fields: [Schema](effect-schema-and-data.md).
+- Services, Layers, dependency lifetimes, or `Effect.fn`: [Services](effect-services.md).
+- Alchemy Workers, Durable Objects, Workflows, or two-phase composition: [Alchemy](effect-alchemy.md).
+- Runtime configuration and providers: [Configuration](effect-configuration.md).
+- Retries, polling, pacing, or timeouts: [Scheduling](effect-scheduling-and-retry.md).
+- Memoization, TTLs, deduplication, or batching: [Caching](effect-caching.md).
+- Streams, subscriptions, buffers, or long-lived consumers: [Streams](effect-streams.md).
+- Outgoing HTTP and rate limits: [HTTP clients](effect-http-clients.md).
+- Test clocks, concurrent tests, or test Layers: [Testing](effect-testing.md).
 
-## Code style
+## Local workflow style
 
-Business logic goes inside a generator; cross-cutting policy wraps it from outside.
+Keep dependency retrieval, sequential effects, branching, and loops in `Effect.gen` or a generator-based `Effect.fn`. Apply cross-cutting error translation, retry, timeout, tracing, and provision outside that control flow. A single pure result transform can stay in `Effect.map`; several dependent transforms belong in a generator where intermediate values and order are visible.
 
-| Concern | Form |
-| --- | --- |
-| Dependency retrieval, sequential steps, branching, loops, early return | `Effect.gen` or a generator-based `Effect.fn` |
-| Error translation, retry, timeout, tracing, logging annotations, provision, Layer composition | `.pipe(...)`, or `Effect.fn` whole-function transforms |
-| One pure result transform | `.pipe(Effect.map(...))` |
-| Several dependent `map` / `flatMap` / `andThen` steps | Rewrite as a generator so intermediate values and control flow are named |
-
-```ts
-const fetchUserPosts = Effect.fn("UserPosts.fetch")(
-  function* (userId: UserId) {
-    const cached = yield* cache.getUserPosts(userId);
-    if (Option.isSome(cached)) return cached.value;
-
-    const posts = yield* database.findPostsByUser(userId);
-    yield* cache.setUserPosts(userId, posts);
-    return posts;
-  },
-  Effect.retry(userPostsRetryPolicy),
-);
-```
-
-A yielded Effect may keep a local `.pipe(...)` for one error translation or result transform. Once that pipe coordinates further Effects or branches on domain outcomes, move the coordination into the generator.
-
-## Cross-cutting defaults
-
-- Compose workflows with `Effect.gen(function* () { ... })` and the project's established `Effect.fn` patterns, following the code-style table above.
-- Recover from the typed error channel at the narrowest boundary with a truthful response; preserve defects and interruption.
-- Use native Effect workflows. Isolate unavoidable Promise or platform APIs in their owning Adapter.
-
-## Completion check
-
-Every matching branch has been read, every chosen Effect API has been verified in the pinned package source, every changed workflow follows the code-style table, and every cross-cutting default has been checked against each changed Effect path. Report any exception with concrete evidence.
+A local `.pipe(...)` around one yielded effect is useful for its own translation or result transform. Whole-operation policy belongs around the whole operation. In particular, wrapping an entire generator in retry repeats every preceding effect, not only the failing step; establish the [retry safety guarantee](../workflows-transactions-and-idempotency.md) first.

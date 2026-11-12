@@ -16,6 +16,8 @@ Honor global session-host orchestration policy: verified T3 orchestration takes 
 
 ## Review independently
 
+Before an implementation audit, inspect outstanding PR feedback and known issues. When implementation is already authorized, verify the findings, address actionable in-scope fixes, and run relevant checks before dispatching reviewers. Otherwise include the known issues in the brief without editing. Skip fixes to code the user explicitly wants to discard.
+
 Pin the intent, exclusions, base SHA and diff command (or exact design documents), scoped paths, untracked files, and available check results. Preserve unrelated work. Give every reviewer the same brief and independent access to the source, without the other reviewers' opinions.
 
 Each brief must specify:
@@ -24,7 +26,9 @@ Each brief must specify:
 - Find evidence-backed correctness, safety, or intent problems; keep recommendations within scope.
 - Return APPROVE or CHANGES, stable finding IDs, severity, file:line/source evidence, and minimal remedies. For code review, include a score out of 10 with a short rationale.
 
-Run both reviewers in parallel. Keep scoped files unchanged until they finish. Wait through the host's result delivery, not polling or duplicate launches.
+Run both reviewers in parallel. As results arrive, validate their evidence and prepare dispositions while the other reviewer runs; keep scoped files unchanged while any reviewer still reads the same checkout. Use the host's result delivery, not polling or duplicate launches.
+
+If the user explicitly marks a reviewer non-blocking, do not delay the report for it. Label the panel incomplete rather than claiming agreement. Treat a late result as advisory feedback and omit its score; any later implementation waits until no reviewer is reading the affected checkout.
 
 ## Reconcile within budget
 
@@ -32,7 +36,7 @@ Default to **three rounds maximum**, including the first pass. Additional rounds
 
 If implementation is already authorized, apply only justified in-scope fixes in the main thread and run the relevant checks. Otherwise present recommendations and stop without editing. Later rounds review deltas and unresolved findings against the same base, without reopening settled nits. Stop early if only optional nits remain.
 
-Finish with agreement on the current reviewed diff, or a clearly labeled unresolved/budget-exhausted result. A changed behavior diff needs fresh coverage; expiry is not consensus. A repeatedly disputed material finding goes to the user rather than forcing agreement.
+Finish with agreement on the current reviewed diff, or a clearly labeled unresolved, incomplete-panel, or budget-exhausted result. A changed behavior diff needs fresh coverage; expiry is not consensus. A repeatedly disputed material finding goes to the user rather than forcing agreement.
 
 ## Report
 

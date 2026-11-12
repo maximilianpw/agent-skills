@@ -1,6 +1,6 @@
 # Effect and Alchemy
 
-Inspect the pinned package versions and local service, schema, error, and test conventions. The references below specialize the shared standards for Effect; they do not require a new framework or migration of unrelated code. Preserve precise success, expected-error, and dependency types.
+These references add local conventions and failure-mode checks to the shared standards, not a second Effect manual. Inspect the pinned versions and use their official documentation for API syntax. The [source rule](effect/runtime/effect.md#source-rule) identifies the checked example baseline and how to find version-matched material. These defaults do not require a framework migration or changes to unrelated code.
 
 ## Load by concern
 

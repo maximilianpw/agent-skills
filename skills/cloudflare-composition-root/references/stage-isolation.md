@@ -1,6 +1,6 @@
 # Stage-isolated infrastructure
 
-Use this when an Alchemy Stack, stage, shared-infrastructure package, or cross-Stack resource reference changes.
+Use this when an Alchemy Stack, stage, shared-infrastructure package, or cross-Stack resource reference changes. Verify stage resolution, provider selection, local identities, and lifecycle APIs against the project's pinned Alchemy source before relying on the provider behavior described below. The isolation requirements remain the same when those APIs differ.
 
 ## One topology per stage
 

@@ -37,7 +37,7 @@ A boundary schema owns its protocol or persistence representation. Derive that r
 
 Use names that preserve meaning:
 
-- `parseX(input): Result<X, ParseXError>` for untrusted or less-structured input;
+- `parseX(input): Effect.Effect<X, ParseXError>` for untrusted or less-structured input; preserve any actual Effect requirements in the signature;
 - `makeX(...)` / `createX(...)` for smart constructors from already-typed pieces;
 - `isX(value): value is X` for true predicates;
 - `assertX(...)` at tests or framework boundaries whose API requires throwing.
@@ -48,7 +48,7 @@ Name parsers `parseX`; reserve predicates and transformations for their actual r
 
 Keep reusable codecs private beside their owning schema/boundary. Export an application parser only for an intended consumer, with its actual representation-specific input and the smallest useful signature: normally unary, with additional domain inputs only when callers need them. Library parse options belong to the codec owner unless they are deliberately part of the public low-level contract.
 
-For Effect decoder selection and private-codec/unary-wrapper examples, read [`effect-schema-and-data.md#decoder-selection-and-public-parsers`](runtime/effect-schema-and-data.md#decoder-selection-and-public-parsers). A genuinely unknown schema-owned boundary remains legitimate; the goal is to preserve provenance, not disguise unknown input to satisfy syntax-only lint.
+For Effect decoder selection and a private-codec/unary-wrapper example, read [`effect-schema-and-data.md#decoder-selection-and-public-parsers`](runtime/effect-schema-and-data.md#decoder-selection-and-public-parsers). A genuinely unknown schema-owned boundary remains legitimate; the goal is to preserve provenance, not disguise unknown input to satisfy syntax-only lint.
 
 ## Schema choices
 

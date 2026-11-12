@@ -1,126 +1,28 @@
 # Streams
 
-Use this when working with `Stream`, event sources, async iterables, queue/pubsub-backed streams, pagination, backpressure, throttling, debouncing, or long-lived stream consumers.
+Use streams for many-valued sources whose demand, ordering, buffering, or subscription lifecycle matters. A repeated effect with no useful emitted values usually belongs in [scheduling](effect-scheduling-and-retry.md). Consult the pinned Stream documentation for source, transformation, and consumption APIs rather than recreating them.
 
-## Mental Model
+## Delivery and ownership
 
-`Stream<A, E, R>` is an effectful source that can emit many `A` values over time, fail with `E`, and require services `R`. Streams are pull-based and backpressured; consumption controls demand.
+Choose delivery semantics before choosing the primitive: a Queue hands an item to one consumer, a PubSub broadcasts to subscribers, and a SubscriptionRef supplies current state plus changes. Expose a Stream from the service; keep producer queues, mutable refs, and test controls private to their owners.
 
-Use streams for sources that are naturally many-valued and time-ordered:
+Backpressure is effective only where the producer cooperates. At a callback or externally pushed boundary, define what happens when the buffer fills: suspend where possible, drop newest, drop oldest, or fail. An unbounded buffer needs an independent bound on growth.
 
-- gateway events
-- provider callbacks adapted through queues
-- subscription/event logs
-- paginated APIs
-- file/stdin/platform streams
-- scheduled ticks when values matter
-- pipelines with filtering, mapping, buffering, throttling, or bounded concurrent processing
+Preserve per-key ordering while allowing concurrency across independent keys. Choose queueing, replacement, or coalescing from application policy; contain keyed fiber bookkeeping in one owner. Use unordered processing only when the observable contract permits it.
 
-Use `Effect.repeat(...)` with `Schedule` for one repeated effect with no emitted values; read [`effect-scheduling-and-retry.md`](effect-scheduling-and-retry.md). Reserve streams for work that emits values.
+## Long-lived consumers
 
-## Source Chooser
+A Layer-owned consumer needs **both scoped lifetime and explicit failure observation**: the scope stops it, and a supervision policy handles failure.
 
-- In-memory values: `Stream.make(...)` or `Stream.fromIterable(...)`.
-- Queue-backed callback boundary: `Queue` plus `Stream.fromQueue(...)`.
-- Broadcast events: `PubSub` plus `Stream.fromPubSub(...)`.
-- Latest-value state plus updates: `SubscriptionRef`.
-- Schedule-generated ticks/values: `Stream.fromSchedule(...)`.
-- Paginated pull APIs: `Stream.paginate(...)`; its effectful step returns `Effect<[chunk, Option<nextState>]>`.
-- Async iterable/platform source: prefer a native Effect source; otherwise use `Stream.fromAsyncIterable(...)`.
-- Effect that produces a stream after reading services/config: `Stream.unwrap(...)`.
+- Fork into the Layer's scope so acquisition can complete. If later service methods start work in that lifetime, capture the scope at acquisition and use it privately.
+- `Effect.forkScoped` returns a Fiber immediately. A later failure does not become an error from the already-completed Layer acquisition. Dropping the Fiber handle is not a supervision policy.
+- Before forking, attach the chosen typed-failure handling, or retain the Fiber for a supervisor to observe through `Fiber.await`/`Fiber.join`. Decide whether failure changes health/readiness, restarts with a bound, or stops the owning runtime. Logging alone is insufficient when callers would otherwise keep using a dead consumer.
+- Keep defects and interruption distinct. Intentional shutdown must not trigger a restart loop; cause-level recovery belongs only to the explicit supervisor.
 
-## Transformation Chooser
+If startup requires the consumer to become ready, use an explicit readiness signal and observe failure before readiness. Successful fiber creation does not prove the subscription or listener initialized.
 
-- Pure transformation: `Stream.map(...)`.
-- Effectful transformation: `Stream.mapEffect(...)`.
-- Bounded concurrent effectful transformation: `Stream.mapEffect(fn, { concurrency })`.
-- Drop ordering when order is irrelevant and latency matters: `Stream.mapEffect(fn, { concurrency, unordered: true })`.
-- One input to zero/many outputs: `Stream.flatMap(...)`.
-- Multiple inner streams concurrently: `Stream.flatMap(fn, { concurrency })`.
-- Keep only matching values: `Stream.filter(...)` / `Stream.filterEffect(...)`.
-- Stateful transformation: `Stream.mapAccum(...)` / `Stream.mapAccumEffect(...)`.
+## Verification
 
-## Consumption Chooser
+Use finite fixtures only for finite sources. An open subscription fixture must remain open until the test deliberately closes or bounds it; collect only a stream known to terminate. Use test-controlled events and [clock/synchronization guidance](effect-testing.md) rather than sleeps.
 
-- Side-effecting consumer: `Stream.runForEach(...)`.
-- Ignore elements but run the stream: `Stream.runDrain`.
-- Materialize a finite stream: `Stream.runCollect`.
-- Fold into a value: `Stream.runFold(...)`.
-- Long-lived consumer: use the scoped layer pattern below.
-
-Use `Stream.runCollect` only when the stream is known to terminate.
-
-## Long-Lived Consumers
-
-Own long-lived stream consumers in layers and fork them into the layer scope.
-
-```ts
-export const layer = Layer.effectDiscard(
-  Effect.gen(function* () {
-    const gateway = yield* Gateway.Service
-
-    yield* gateway.events.pipe(
-      Stream.filter(isMessageEvent),
-      Stream.runForEach(handleEvent),
-      Effect.forkScoped,
-    )
-  }),
-)
-```
-
-If service methods must fork work into the layer lifetime, capture `Scope.Scope` during layer acquisition, use `Effect.forkIn(scope)` internally, and keep the scope private. Let stream failures reach the owning boundary unless it has a truthful recovery policy.
-
-## Queues, PubSub, And SubscriptionRef
-
-- Use `Queue` when each event/item should be consumed by one consumer or worker.
-- Use `PubSub` when every subscriber should see every event.
-- Use `SubscriptionRef` when consumers need the current value and a stream of changes.
-- Expose a `Stream` from service interfaces for caller-consumed events.
-- Keep producer queues and mutable refs inside the implementation or test service.
-
-Good service shape:
-
-```ts
-export interface Interface {
-  readonly events: Stream.Stream<ProviderEvent, ProviderError>
-  readonly status: Stream.Stream<ProviderStatus>
-}
-```
-
-Implementation can use private `Queue` / `SubscriptionRef`; consumers see streams.
-
-## Backpressure And Buffers
-
-Prefer natural stream backpressure first.
-
-Use `Stream.buffer(...)` only when producer and consumer should decouple.
-
-- `strategy: "suspend"`: apply backpressure when full.
-- `strategy: "dropping"`: drop new values when full.
-- `strategy: "sliding"`: keep the latest values by dropping old ones.
-- `capacity: "unbounded"`: rare; use only when growth is bounded elsewhere.
-
-Use `Stream.debounce(...)` for quiet-period behavior and `Stream.throttle(...)` / `Stream.throttleEffect(...)` for rate-shaped streams.
-
-## Error Handling
-
-- Translate typed errors at boundaries with `Stream.mapError(...)`.
-- Recover typed errors with `Stream.catchIf(...)`, `Stream.catchTag(...)`, or `Stream.catchFilter(...)`.
-- Reserve `Stream.catchCause(...)` for explicit supervision boundaries.
-
-## Keyed Concurrency
-
-For keyed work, preserve ordering within each key while allowing different keys to run concurrently. Prefer an existing named keyed-run helper; otherwise keep the required fiber bookkeeping in one named helper rather than scattering it through consumers. Choose queueing, replacement, or coalescing semantics from the owning operation's policy.
-
-## Tests
-
-- Use `Stream.fromIterable(...)` for finite fixtures; compose it with `Stream.concat(Stream.never)` when the fixture represents an open subscription.
-- Use `Stream.empty` for no events.
-- Use `Stream.fromQueue(...)` with a test-owned `Queue` when the test needs to drive events interactively.
-- Bound open streams with `Stream.take(n)` before `Stream.runCollect`.
-
-For stream tests involving time or concurrency, read and apply [`effect-testing.md`](effect-testing.md) completely.
-
-## Completion Check
-
-The source matches the producer's delivery semantics; ordering and concurrency are explicit; every collected stream is finite; buffers have a bounded-growth policy; long-lived consumers have a scoped owner; queue, `PubSub`, and `SubscriptionRef` internals stay behind stream-facing service interfaces; and typed failures, defects, and interruption reach a boundary with an explicit policy.
+Exercise readiness, post-acquisition consumer failure, and owner shutdown separately. Assert that failure is observed, health/restart behavior follows policy, and scope closure interrupts the consumer and releases its resources.

@@ -57,7 +57,7 @@ Plain functions, immutable value classes, and static-style classes are all valid
 
 An Application Service owns one cohesive application operation or capability. Use one when behavior coordinates authorization, domain decisions, persistence, external calls, transactions, messages, time, IDs, telemetry, or multiple entrypoints.
 
-Design a meaningful service from its explicit interface first. In plain TypeScript, use a service interface and implementation class. When an Effect service, tag, `make`, Layer, or dependency requirement changes, read and apply [`effect-services.md`](runtime/effect-services.md). Reserve service interfaces for helpers that own an application capability.
+Design a meaningful service from its explicit interface first. When an Effect service, tag, construction, Layer, or dependency requirement changes, read [`effect-services.md`](runtime/effect-services.md) for its module shape. Reserve service interfaces for helpers that own an application capability.
 
 An Application Service:
 
@@ -67,7 +67,7 @@ An Application Service:
 - owns which effects occur, under what policy, and in what order;
 - keeps its public contract independent of framework, ORM, vendor SDK, and runtime types.
 
-Plain TypeScript dependency-bearing classes receive service objects through constructors. Effect code yields stable runtime capabilities and implementation dependencies through context. Authorization evidence, scoped handles, and other operation-specific capability values remain explicit inputs when they are part of the request or domain contract. A callback dependency is appropriate when higher-order behavior itself is the capability.
+Effect code yields stable runtime capabilities and implementation dependencies through context. Authorization evidence, scoped handles, and other operation-specific capability values remain explicit inputs when they are part of the request or domain contract. A callback dependency is appropriate when higher-order behavior itself is the capability.
 
 A service may expose multiple related methods when they share one owner and reason to change. `Service` is an honest name for a broad cohesive capability when a more specific noun would misstate its scope, as with `EmailService` or `UserService`.
 
@@ -83,30 +83,7 @@ Consumer-qualified capability names such as `UsersForPasswordReset` are prohibit
 
 Name an operation so its purpose remains clear at ordinary call sites and definition-site search results. Include domain context that distinguishes the operation; omit words that add no meaning.
 
-Start a meaningful service with its interface. When the interface and ordinary implementation naturally need the same name, use a compact `I` prefix:
-
-```ts
-export interface IEmailService {
-  sendWelcomeEmail(...): Result<void, SendWelcomeEmailError>;
-  sendPasswordResetEmail(...): Result<void, SendPasswordResetEmailError>;
-}
-
-export class EmailService implements IEmailService {
-  // ...
-}
-```
-
-Interfaces whose implementations already have natural distinguishing names need no prefix:
-
-```ts
-export interface UserStore {
-  findActiveByEmail(email: EmailAddress): Promise<Result<ActiveUser, UserLookupError>>;
-}
-
-export class PostgresUserStore implements UserStore {
-  // ...
-}
-```
+Use the owning capability's established Effect [module naming style](runtime/effect-services.md#module-shape). A namespace such as `EmailSender` can expose `Interface` and `Service`; a capability-prefixed API can identify those roles directly. Keep operation success, expected failures, and requirements in the `Effect.Effect` signature rather than introducing a parallel Promise/Result service contract.
 
 Name a dependency variable for the object it holds. Keep `Service`, `Store`, or `Sender` when the bare domain noun could mean a value: `emailService` is clearer than `email`. A natural plural may already communicate a collection-like capability, so both `users` and `userStore` can be clear. Preserve either clear local name rather than creating naming-only churn. When changed behavior makes a name inaccurate or changes its audience, rename it as part of the same change.
 
@@ -151,11 +128,4 @@ Allocate authentication and authorization responsibilities as follows:
 
 ## Completion check
 
-Complete when every changed operation has been traced and accounted for against every applicable rule in this reference:
-
-- each concern has one owner, Domain Modules remain pure, and authentication and authorization follow the stated allocation;
-- each meaningful service starts from an explicit interface, broader services compose smaller cohesive capabilities only after those seams earn their place, and orchestration keeps sequence and policy visible while delegating owned calculations and mechanisms;
-- protocol, framework, persistence, runtime, and vendor details stop at their owning Adapter or private service implementation;
-- each new abstraction passes the deletion test and existing-owner check, with evidence reported and lasting rationale co-located; complexity refactors satisfy the cohesion check above;
-- capability names use ordinary vocabulary that stays stable across callers, operation names remain clear at call sites and definition-site searches, stale names change with their behavior or audience, and implementation qualifiers preserve only meaningful distinctions; and
-- each entrypoint parses protocol input, invokes the owning application or pure domain operation, and renders the protocol result.
+Trace each changed operation from ingress to outcome: identify its policy, pure rules, external translations, and composition owner. Show why each new seam passes the deletion test, and verify that moving responsibilities preserves effect order, failure policy, and public contracts. Report any remaining mixed responsibility with its concrete caller or symbol.

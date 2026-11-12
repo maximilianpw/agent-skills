@@ -16,7 +16,7 @@ Construct branded/refined values through parsers or smart constructors, then pas
 
 Push optionality outward. Branch or parse before calling a function that requires a value.
 
-Inside the application, represent every optional field, property, parameter, and return value as `Option.Option<A>`. Nullable or absent external input decodes into `Option` at its boundary, and encodes back to `null`, `undefined`, or an omitted key only where an external contract requires that representation. See [optionality and defaults](runtime/effect-schema-and-data.md#optionality-and-defaults) for the encoded side.
+Our local convention is to represent every in-application optional field, property, parameter, and return value as `Option.Option<A>`; Effect itself also supports other representations. Nullable or absent external input decodes into `Option` at its boundary, and encodes back to `null`, `undefined`, or an omitted key only where an external contract requires that representation. See [optionality and defaults](runtime/effect-schema-and-data.md#optionality-and-defaults) for the encoded side.
 
 Use `Partial<T>` only when partiality is the actual domain concept. Define explicit operation inputs otherwise.
 

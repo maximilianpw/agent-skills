@@ -10,7 +10,7 @@ The typed API contract in code (an Effect `HttpApi`, a schema-annotated router, 
 
 - Give every value a generated client must supply a safe, realistic example: branded IDs, names, request bodies, lifecycle states. Importer placeholders such as `<string>` produce unusable requests.
 - Describe where each identifier comes from. When one operation creates an ID another consumes, say it comes from the create response, so clients can chain requests instead of persisting instance-specific IDs.
-- Include a representative success example and each public error example per operation, conforming to the production schemas and the envelope in [`public-errors.md`](public-errors.md).
+- Include a representative success example and each public error example per operation, conforming to the production schemas and the established or newly defined [public error contract](public-errors.md#public-contract).
 - Declare every correlation response header, including on error responses, when the contract library models response headers. When it does not, omit that metadata rather than casting generated types to inject it.
 - Document authentication schemes with their real header names and purpose, and verify a generated client's auth mapping by importing it.
 - List only truthful server URLs. A stable local URL is fine; an invented production hostname is not.

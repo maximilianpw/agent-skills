@@ -1,66 +1,41 @@
 # Public errors
 
-Use this when a failure crosses a public boundary: an HTTP or RPC response, a CLI message, an SDK error, or any error another team or agent reads. Internal error design stays in [`failures.md`](failures.md); this reference governs what callers see.
+Use this when a failure crosses a public boundary: an HTTP or RPC response, a CLI message, or an SDK error. Internal error design stays in [`failures.md`](failures.md); this reference governs what callers see.
 
 ## Messages
 
 A public message is a product interface. Each one:
 
 - names the operation or outcome that failed and gives the most specific safe reason known;
-- ends with a way forward: correct the identified input, retry the same operation, read back or reconcile the named resource, or contact support with the request ID;
-- offers reassurance ("the Account name was unchanged") only when the operation could not have committed that change. Across a non-atomic operation, state the uncertainty and direct the caller to read the resource;
+- offers an actionable way forward when one is known: correct the identified input, retry safely, reconcile the named resource, or contact support with a correlation ID when available;
+- offers reassurance ("the document was unchanged") only when the operation could not have committed that change. Across a non-atomic operation, state the uncertainty and direct the caller to read the resource;
 - uses calm, direct domain vocabulary, describing the problem rather than blaming the caller or a provider;
-- begins with a stable literal phrase, so a reported message searches straight back to its source.
+- has a stable code or literal message phrase that leads a plain-text search back to its owner.
 
-```text
-Pool checkout has no run wfp-missing. Check the run ID; it comes from the dispatch response.
-```
+## Public contract
 
-## Envelope
+Preserve an established error protocol, envelope, and SDK compatibility. These defaults do not authorize a wire-format migration. For a new structured error contract, use a discriminated union with:
 
-Serve every public failure in one envelope:
-
-- `code`: a stable, machine-readable literal per failure variant;
+- `code`: a stable, machine-readable literal per public failure variant;
 - `message`: the operation-specific message above;
 - `details`: safe structured context, typed per variant;
-- `requestId`: correlates the response with traces and logs;
-- `retryable`: true only when repeating the same request is safe and may succeed.
+- `requestId`: the existing correlation identifier when the operation has request context;
+- `retryable`: true only when repeating the same logical operation is safe and may succeed.
 
-Model the envelope as a discriminated union on `code`, each variant with its own `details` schema. An unrestricted details record lets a code and its details disagree; the union makes them agree by construction.
+The public `code` is a compatibility contract independent of an internal class name or Effect `_tag`. An internal refactor must not silently change it. Pair each code with its own details schema rather than an unrestricted record.
 
-`retryable` follows the operation's real idempotency. When an outcome is unknown, say whether retrying with the same idempotency key is safe; when a retry could start a second logical operation, the error is not retryable.
+Map these meanings onto the existing protocol when field names differ. A local CLI failure does not need a fabricated request ID or JSON envelope; a remote SDK failure should preserve the server's correlation identifier.
 
-## Translation
+Retry guidance follows the operation's real idempotency. When an outcome is unknown, say whether retrying with the same idempotency key is safe; when a retry could start a second logical operation, do not advertise it as retryable.
 
-The public adapter translates each known internal error explicitly into its public variant. Exhaustive translation turns a newly introduced failure into a compile error until someone chooses its code, status, message, details, and retry guidance; a catch-all fallback hides that decision.
+## Translation and redaction
 
-Public output carries the operation, the requested domain IDs, and the classified reason. Credentials, access assertions, token claims, raw request bodies, SQL, stack traces, internal causes, schema issues that echo payloads, and vendor response bodies stay in internal telemetry, correlated by `requestId`.
+The public adapter translates each known internal error explicitly into its public variant. Keep unhandled known variants visible to the typechecker or exhaustive tests until someone selects their public outcome. At the outermost boundary, unexpected defects may use a generic public message with the available correlation identifier, never the cause, stack trace, or defect message. That fallback is not a substitute for classifying known failures.
 
-## HTTP status
+Expose only authorized, safe identifiers and details. Credentials, access assertions, token claims, and raw payloads must not leak into public errors or telemetry. SQL, stack traces, internal causes, schema issues that echo payloads, and vendor response bodies are excluded from public output. Keep richer internal diagnostics only under the repository's redaction policy; correlate safe internal causes with the public identifier where available.
 
-Choose status from the caller-visible meaning, not from the component that failed:
-
-| Status | Meaning |
-| --- | --- |
-| `400` | The caller can correct malformed or invalid request data. |
-| `401` | The request could not be authenticated. |
-| `403` | The authenticated caller may not perform the operation. |
-| `404` | A syntactically valid resource identity is unknown. |
-| `409` | Current resource state conflicts with the operation. |
-| `415` | The request uses an unsupported media type. |
-| `500` | An internal invariant failed or a non-transient internal failure occurred. |
-| `503` | A required capability is temporarily unavailable. |
+For HTTP, choose status from caller-visible meaning and the established API contract, not from the component that failed. Declare it in the owning contract and verify the actual response, including error headers and serialization.
 
 ## Completion check
 
-Every changed public failure:
-
-1. names what failed and the most specific safe reason;
-2. carries typed `details` that agree with its `code`;
-3. tells the caller how to correct, retry, reconcile, or escalate;
-4. makes only provably true reassurance and retry claims;
-5. reads calmly in domain vocabulary;
-6. has a message or code searchable in the source;
-7. carries a `requestId` that matches traces and logs;
-8. excludes secrets, internal causes, and raw external data;
-9. is translated explicitly at its boundary, never by a catch-all.
+Exercise each changed public failure through its adapter. Verify contract compatibility, code/detail agreement, safe output, and correlation where applicable. Check retry and reassurance claims against commit/idempotency behavior, including uncertain outcomes. Known failures retain explicit translations; unexpected defects produce only the sanitized fallback.

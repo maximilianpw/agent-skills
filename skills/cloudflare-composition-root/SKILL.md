@@ -100,12 +100,15 @@ Run focused behavior, adapter, and runtime tests. Use the representative local C
 Search the changed source for leakage, tailoring paths and symbols to the repository:
 
 ```bash
-rg 'Env|ExecutionContext|KVNamespace|R2Bucket|D1Database|DurableObjectNamespace|Queue' src packages
-rg 'context\.env|this\.env|env\.[A-Z][A-Z0-9_]+' src packages
+rg -n '\b(Env|ExecutionContext|KVNamespace|R2Bucket|D1Database|DurableObjectNamespace)\b' src packages
+rg -n '\b(context\.env|this\.env|env\.[A-Z][A-Z0-9_]*)\b' src packages
+rg -n '\bQueue\b' src packages
 rg 'cloudflare:workers|wrangler|Cloudflare\.(Worker|DurableObject|Queues|Workflow)' src packages
 ```
 
-Classify every match as one of:
+Also search the actual generated environment type, binding names, and imported aliases. Resolve `Queue` candidates to their declarations before classifying them: Effect's `Queue` is not a Cloudflare binding, and `Environment` is not a match for `Env`. These searches find candidates, not proof of either a violation or a clean boundary.
+
+Classify every confirmed Cloudflare match as one of:
 
 - composition root;
 - binding adapter;

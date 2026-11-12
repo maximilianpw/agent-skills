@@ -11,7 +11,7 @@
 
 Prefer a real in-memory or local implementation when it preserves production semantics at reasonable cost. Use a small fake that implements the real application-owned interface when infrastructure is unsuitable.
 
-Use module mocks when the repository convention or boundary makes them the clearest option. Do not rewrite an established mocked suite as a side effect. Avoid mocks that permit impossible behavior or duplicate implementation details.
+Outside Effect-owned behavior, use module mocks when the repository convention or boundary makes them the clearest option. For Effect-owned behavior, [Effect testing](effect/testing.md) specializes this rule: substitute services through Layers rather than mocking modules. Keep unrelated established suites unchanged. Avoid test doubles that permit impossible behavior or duplicate implementation details.
 
 ## Cover risky shapes
 
