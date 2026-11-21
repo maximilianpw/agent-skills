@@ -42,7 +42,7 @@ npx skills update --global
 - `cloudflare-composition-root` — keep Cloudflare bindings, runtime lifetimes, and platform types at their owning boundaries.
 - `coding-standards` — shared engineering rules with conditional TypeScript, Effect/Alchemy, React, and NestJS references.
 - `council` — gather independent reviews from two model providers within a fixed round budget.
-- `cua-helium` — operate Helium on macOS or Linux through the local Cua Driver computer server.
+- `cua-helium` — operate Helium on macOS or Linux through Cua Driver.
 - `file-pr` — prepare or publish concise, problem-first PRs under explicit authorization.
 - `leaving-pr-comments` — attribute agent-authored GitHub replies and verify their publication.
 - `model-routing` — select models for workflows, subagents, and independent reviews.

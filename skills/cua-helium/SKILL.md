@@ -1,38 +1,18 @@
 ---
 name: cua-helium
-description: Use the locally configured Cua Driver computer MCP server to operate Helium on macOS or Linux. Use when driving, automating, inspecting, or navigating the Helium browser, especially when browser profiles or authenticated identity matter.
+description: Use Cua Driver, through the computer MCP server or the cua-driver CLI, to operate Helium on macOS or Linux. Use when driving, automating, inspecting, or navigating the Helium browser, especially when browser profiles or authenticated identity matter.
 compatibility: Requires the upstream cua-driver skill, Helium, and either the configured computer MCP server or the cua-driver CLI.
 ---
 
 # Cua Driver with Helium
 
-Apply this integration together with the upstream `cua-driver` skill. Read that skill's `SKILL.md` and applicable platform/browser references completely before acting; its snapshot-before-action and verification rules remain authoritative.
+Use this skill together with the upstream `cua-driver` skill. Read that skill's `SKILL.md` and applicable platform/browser references completely before acting; its snapshot-before-action and verification rules remain authoritative.
 
-## Apply the local overlay
-
-After installing or updating the upstream Cua skill with the Skills CLI, run the idempotent overlay helper from this skill directory:
-
-```bash
-python3 scripts/apply-overlay.py
-python3 scripts/apply-overlay.py --check
-```
-
-The helper copies [`assets/LOCAL.md`](assets/LOCAL.md) into the installed Cua skill and inserts a marked “read local integration first” section after its title. It checks `~/.agents/skills/cua-driver` before `~/.pi/agent/skills/cua-driver`; pass `--target <directory>` to select another installation explicitly.
-
-Because the overlay intentionally modifies the installed skill, remove it before asking the Skills CLI to update Cua, then reapply it:
-
-```bash
-python3 scripts/apply-overlay.py --remove
-npx skills update --global
-python3 scripts/apply-overlay.py
-python3 scripts/apply-overlay.py --check
-```
-
-Keep the official Cua files under Skills CLI ownership; local behavior belongs to the overlay source and helper here.
+Leave the upstream skill unmodified: whichever tool installs it (Nix, the Skills CLI, or a manual copy) owns its files and updates. This skill adds only the Helium workflow, so read both.
 
 ## Transport
 
-Prefer the persistent `computer` MCP server for multi-step GUI workflows. `~/pi-config/mcp.json` defines it as:
+When the harness has the persistent `computer` MCP server, prefer it for multi-step GUI workflows. `~/pi-config/mcp.json` defines it for Pi as:
 
 ```text
 computer -> cua-driver mcp
@@ -42,7 +22,7 @@ The server starts lazily, keeps the connection alive, does not inherit Pi's full
 
 Discover the live tools from the `computer` server before use. Describe an unfamiliar tool once, then reuse its installed schema. Keep one transport for an ordered workflow: do not mix one-shot CLI actions into an active MCP sequence.
 
-If `computer` is configured but disconnected, reconnect it once and rediscover its tools. If the current session has no MCP adapter or server, use the `cua-driver` CLI. A permission refusal is not a connection failure: stop and ask for the required OS permission or foreground authorization.
+If `computer` is configured but disconnected, reconnect it once and rediscover its tools. Harnesses without that server use the `cua-driver` CLI as the upstream skill describes. A permission refusal is not a connection failure: stop and ask for the required OS permission or foreground authorization. Do not substitute AppleScript or global-pointer tools after a Cua refusal.
 
 ## Cross-platform Helium identity
 
@@ -76,14 +56,14 @@ Never enable remote debugging, relaunch an authenticated profile, change browser
 
 Prefer APIs, CLIs, and filesystem operations for non-GUI outcomes. Use Cua for authenticated UI, native application state, and visual verification.
 
-Keep background delivery and the visible agent cursor by default. Foreground or desktop takeover requires existing authorization or a new approval. After every action, verify the requested postcondition from fresh state; successful delivery is not task completion.
+Keep background delivery and the visible agent cursor by default. Foreground or desktop takeover, including temporarily activating Helium for a native menu operation, requires existing authorization or a new approval. After every action, verify the requested postcondition from fresh state; successful delivery is not task completion. Never retry text insertion before inspecting whether the first attempt landed.
 
 Do not enable recording or history automatically. Do not persist screenshots, accessibility trees, URLs, account markers, or captured browser state in this public repository.
 
 ## Configuration ownership
 
 - `~/pi-config/mcp.json` owns the `computer` MCP server definition.
-- `~/nix-config` owns Cua Driver and Helium installation on Linux and Helium availability on macOS.
+- `~/nix-config` owns the Cua Driver binary and upstream `cua-driver` skill on desktop hosts, Helium on Linux, and Helium availability on macOS.
 - This skill owns only the agent workflow connecting those capabilities.
 
 When configuration changes, verify this integration against the installed `cua-driver` version and live MCP schemas. Preserve upstream safety invariants rather than copying stale tool names forward.
