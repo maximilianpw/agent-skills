@@ -38,6 +38,7 @@ npx skills update --global
 
 ## Skills
 
+- `auditing-code` — audit a diff, branch, or whole repository and report findings by severity.
 - `babysit-pr` — monitor CI and review feedback with a bounded, resumable PR watcher.
 - `cloudflare-composition-root` — keep Cloudflare bindings, runtime lifetimes, and platform types at their owning boundaries.
 - `coding-standards` — shared engineering rules with conditional TypeScript, Effect/Alchemy, React, and NestJS references.
