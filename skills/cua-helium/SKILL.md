@@ -1,28 +1,20 @@
 ---
 name: cua-helium
-description: Use Cua Driver, through the computer MCP server or the cua-driver CLI, to operate Helium on macOS or Linux. Use when driving, automating, inspecting, or navigating the Helium browser, especially when browser profiles or authenticated identity matter.
-compatibility: Requires the upstream cua-driver skill, Helium, and either the configured computer MCP server or the cua-driver CLI.
+description: Operate the Helium browser on macOS or Linux through the `computer` MCP server (Cua Driver). Use when driving, automating, inspecting, or navigating Helium, especially when browser profiles or authenticated identity matter.
+compatibility: Requires Helium and the `computer` MCP server.
 ---
 
 # Cua Driver with Helium
 
-Use this skill together with the upstream `cua-driver` skill. Read that skill's `SKILL.md` and applicable platform/browser references completely before acting; its snapshot-before-action and verification rules remain authoritative.
-
-Leave the upstream skill unmodified: whichever tool installs it (Nix, the Skills CLI, or a manual copy) owns its files and updates. This skill adds only the Helium workflow, so read both.
+The `computer` MCP server is Cua Driver. Its instructions, sent when it connects, are the general rules for driving any app: find the window, read narrowly, act by element token, batch with `run_steps`, and verify at checkpoints. Follow them. This skill adds only what is specific to Helium.
 
 ## Transport
 
-When the harness has the persistent `computer` MCP server, prefer it for multi-step GUI workflows. `~/pi-config/mcp.json` defines it for Pi as:
+Use the `computer` MCP server. It runs `fleet computer <host>`, which is `cua-driver mcp` on the desktop host itself and the same server over SSH from any other host, so the windows it sees belong to that desktop, not necessarily to the machine you run on.
 
-```text
-computer -> cua-driver mcp
-```
+Discover its tools before use, describe an unfamiliar tool once, then reuse its schema. For deeper guidance call `get_guide` with a topic (`browser`, `menus`, `batching`, `drag`, `permissions`) instead of guessing; it comes from the running driver, so it matches its tools.
 
-The server starts lazily, keeps the connection alive, does not inherit Pi's full environment, and requires approval for every MCP tool call.
-
-Discover the live tools from the `computer` server before use. Describe an unfamiliar tool once, then reuse its installed schema. Keep one transport for an ordered workflow: do not mix one-shot CLI actions into an active MCP sequence.
-
-If `computer` is configured but disconnected, reconnect it once and rediscover its tools. Harnesses without that server use the `cua-driver` CLI as the upstream skill describes. A permission refusal is not a connection failure: stop and ask for the required OS permission or foreground authorization. Do not substitute AppleScript or global-pointer tools after a Cua refusal.
+If the server is disconnected, reconnect once and rediscover its tools. If it fails to start, the desktop host is probably asleep, locked, or offline: say so and stop rather than switching to another way of controlling the machine. A permission refusal is not a connection failure: stop and ask for the required OS permission or foreground authorization. Do not substitute AppleScript, shell input tools, or global-pointer tools after a Cua refusal.
 
 ## Cross-platform Helium identity
 
@@ -46,9 +38,9 @@ Do not encode profile names, account names, email addresses, or profile-director
 
 ## Browser route
 
-Read the upstream `cua-driver` skill's `BROWSER.md` before using typed browser tools or preparing Chromium debugging.
+Call `get_guide({topic: "browser"})` before using typed browser tools.
 
-Do not assume Helium supports Cua's typed Chromium page route merely because it is Chromium-based. First bind the exact native Helium window using the installed browser tools. If the browser route is unavailable or refuses the existing profile, continue through native window accessibility and pixel actions.
+Do not assume Helium supports Cua's typed Chromium page route merely because it is Chromium-based. First bind the exact native Helium window with `get_browser_state`. If it refuses, follow its `next_call` only when that does not need any of the changes below; otherwise continue through the window's accessibility tree, and pixel actions where the tree cannot reach.
 
 Never enable remote debugging, relaunch an authenticated profile, change browser policy, or widen existing-profile authorization solely to make automation easier without the user's approval. Keep browser-page identity separate from native-window identity: a page target does not authorize another Helium window or profile.
 
@@ -62,8 +54,7 @@ Do not enable recording or history automatically. Do not persist screenshots, ac
 
 ## Configuration ownership
 
-- `~/pi-config/mcp.json` owns the `computer` MCP server definition.
-- `~/nix-config` owns the Cua Driver binary and upstream `cua-driver` skill on desktop hosts, Helium on Linux, and Helium availability on macOS.
-- This skill owns only the agent workflow connecting those capabilities.
+- `~/nix-config` declares the `computer` MCP server for every agent harness, and installs Cua Driver on desktop hosts, Helium on Linux, and Helium's availability on macOS.
+- This skill owns only the Helium workflow on top of that server.
 
-When configuration changes, verify this integration against the installed `cua-driver` version and live MCP schemas. Preserve upstream safety invariants rather than copying stale tool names forward.
+When the driver is updated, trust the server's live instructions, guides, and schemas over anything in this file, and preserve their safety rules rather than copying stale tool names forward.
