@@ -49,6 +49,10 @@ Resolve the invocation-memo helper from the pinned Alchemy package or its owning
 
 Keep the keyed resolver private to the client implementation; service operations call it internally, and it never appears on the service interface. With exactly one target per invocation, memoize the single suspended client without a `Cache`. Suspension alone delays acquisition; an isolate-scoped Layer or cache still has the wrong lifetime. Ready application Layers leave implementation selection at its existing owner rather than exporting client resolvers to callers.
 
+### Waiting across requests
+
+A Worker fiber resumed by another request continues in that request's I/O context. `Deferred`, latches, `Semaphore`, and `Effect.cached` resume their waiters from the fiber that completes them, so a request that waits on another request through one of them then fails on its own stubs, sockets, and streams with "Cannot perform I/O on behalf of a different request". Do not let requests in one isolate wait on each other through Effect synchronization primitives. Build the value per request, or hand a shared result over through a native `Promise` that each waiter awaits from its own fiber. Durable Object requests share one I/O context and are unaffected.
+
 ## Verification
 
-Exercise planning without native storage access, runtime startup with migrations complete before serving, and repeated invocations without stale clients. Verify binding discovery and physical resource identity separately from application tests. Document any departure from the local HTTP default without treating it as a library incompatibility. Local runtime tests do not authorize production deployments, resource adoption, or namespace transfers.
+Exercise planning without native storage access, runtime startup with migrations complete before serving, repeated invocations without stale clients, and concurrent Worker requests that share any isolate-level value. Verify binding discovery and physical resource identity separately from application tests. Document any departure from the local HTTP default without treating it as a library incompatibility. Local runtime tests do not authorize production deployments, resource adoption, or namespace transfers.

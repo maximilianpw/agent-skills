@@ -57,6 +57,7 @@ Classify each route's critical, deferred, stale-refresh, empty, missing, forbidd
 - Keep empty collections and optional selected panels as successful feature states.
 - For suspense Query errors, call `useQueryErrorResetBoundary().reset()` when the route error boundary mounts, then reset/invalidate Router state on retry.
 - Keep already-rendered layout chrome mounted when only child content is pending or failed, unless the whole layout truly depends on the operation.
+- Keep valid data visible during a background refresh and show a refresh failure in the affected region. Place error boundaries around data regions, not around forms or editors: a refresh error must not remount a form and discard its draft. Test an edited field or open interaction through failure and recovery, because matching final screenshots do not show that local state survived.
 
 A React Error Boundary or framework `errorComponent` catches errors thrown while rendering its descendant tree. It does not catch failures from event handlers, later asynchronous callbacks, server rendering, or the boundary itself. Handle user-caused async failures in the owning event/mutation flow. Put route loading and rendering failures in the framework's route boundary, and pair suspense Query failures with Query's reset boundary. Suspense owns pending presentation, not error recovery.
 
@@ -75,6 +76,14 @@ Use feature-specific `mutationOptions` or controller logic when it owns meaningf
 - The authority owner refreshes session/capability state after privilege changes.
 - The screen owns localized success feedback, dialog closure, and focus restoration.
 - Prevent a destructive or durable command dialog from appearing cancellable while the command continues in the background.
+
+A successful write does not mean dependent reads have refreshed; triggering a refetch starts a read without awaiting it. Before success clears a draft, closes a dialog, or navigates, reconcile the cache:
+
+- Apply the server's confirmed result to the current cached value, not a snapshot taken before the request, then refresh what must be read again. Do not invent fields the response lacks.
+- Leave the cache unchanged when the write fails. When the write commits but the follow-up read fails, keep the confirmed value beside the read error; reporting the write as failed invites a duplicate. A later successful read replaces it.
+- Keep the previous value visible while that read runs. Discard it first only when it must not be shown, such as a removed resource or revoked authority.
+- Key independent mutations by resource (and tenant where applicable). A mutation owner that supersedes or cancels its earlier call, such as Effect Atom's `Atom.fn`, must not be shared between unrelated editors.
+- Do not paper over reconciliation with delays, component-local sticky values, or waiting on a live stream that may never deliver.
 
 ## TanStack Start and SSR
 

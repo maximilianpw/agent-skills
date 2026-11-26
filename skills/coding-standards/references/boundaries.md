@@ -48,6 +48,7 @@ Apply the deletion test to an extraction: if removing the new module would sprea
 
 - Keep environment access, secrets, database clients, and privileged SDKs in server-only modules.
 - Enforce authorization on the server for every request or action, regardless of what the UI shows.
+- Name the tenant, organization, or account an operation targets in the request itself (URL path or explicit parameter) and check current membership on every request. A session-wide "active" selection must not choose an API target; independent tabs, OAuth returns, and agent grants keep their own target. A missing or inaccessible target fails rather than falling back to another.
 - Read and parse configuration once at startup or at the framework's established configuration boundary.
 - Pass typed configuration inward; do not scatter environment-variable reads through business code.
 - Validate cross-field configuration rules before serving work.
@@ -61,6 +62,8 @@ Apply the deletion test to an extraction: if removing the new module would sprea
 - Do not hold transactions open across unrelated network calls without an explicit design reason.
 - Make redelivered messages and retried workflows idempotent. Store the idempotency decision with the side effect when races matter.
 - Record enough durable state to resume multi-step work safely; in-memory progress is not a workflow guarantee.
+- Keep each schema migration compatible with the server version already running, since migrations run before the new server deploys: add schema first, deploy readers and writers, and remove unused schema in a later release. A storage migration does not make a removed API compatible.
+- Append migrations rather than editing applied ones. Exercise fresh initialization, existing data retained, refusal of unsupported state, rollback, and a repeat run.
 
 ## Observability
 
