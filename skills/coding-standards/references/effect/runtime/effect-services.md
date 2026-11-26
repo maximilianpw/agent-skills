@@ -47,7 +47,7 @@ An error mapper is reusable only when its entire source error channel has one me
 
 Use `layerMemory` for a faithful in-memory contract and `layerTest` for an implementation with test controls or failure injection. Prefer a real local substitute when transactions, serialization, or protocol semantics matter. A one-off fake stays in its test rather than creating production exports.
 
-When reusable test controls are needed, [Effect testing](effect-testing.md#reusable-test-implementations) defines how they share the production implementation without entering the production interface.
+When reusable test controls are needed, [Effect testing](../testing.md#reusable-test-implementations) defines how they share the production implementation without entering the production interface.
 
 ## Verification
 

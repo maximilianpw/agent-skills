@@ -4,7 +4,7 @@ Personal agent skills maintained by [Maximilian Pinder-White](https://github.com
 
 ## Install
 
-Install every skill globally with the [Skills CLI](https://github.com/vercel-labs/skills):
+The maintainer's machines install these skills from sources pinned in nix-config. Everyone else can install every skill globally with the [Skills CLI](https://github.com/vercel-labs/skills):
 
 ```bash
 npx skills add maximilianpw/agent-skills --global --skill '*' --yes
@@ -22,11 +22,8 @@ Install the upstream Matt Pocock skills used alongside this collection:
 npx skills add mattpocock/skills --global \
   --skill code-review \
   --skill domain-modeling \
-  --skill grilling \
-  --yes
-
-npx skills add https://github.com/cursor/plugins/tree/main/pstack/skills/tdd \
-  --global \
+  --skill grill-me \
+  --skill tdd \
   --yes
 ```
 
@@ -38,7 +35,6 @@ npx skills update --global
 
 ## Skills
 
-- `auditing-code` — audit a diff, branch, or whole repository and report findings by severity.
 - `babysit-pr` — monitor CI and review feedback with a bounded, resumable PR watcher.
 - `cloudflare-composition-root` — keep Cloudflare bindings, runtime lifetimes, and platform types at their owning boundaries.
 - `coding-standards` — shared engineering rules with conditional TypeScript, Effect/Alchemy, React, and NestJS references.
@@ -50,7 +46,6 @@ npx skills update --global
 - `modernize` — reassess an old PR's intent and relevance before rebasing it.
 - `project-verification` — create or maintain a project-local harness and feature map that prove behavior on the real user surface.
 - `remote-development` — operate remote development machines through the Fleet CLI.
-- `sol-loop` — run a bounded Sol review loop with an evidence-backed finding ledger.
 - `takeover` — continue inherited work while preserving intent and contributor credit.
 - `write-discoverable-code` — make names, modules, errors, and events easy to find through search.
 
@@ -58,9 +53,9 @@ Pi can also load this repository directly as a package because `package.json` ex
 
 ## Requirements
 
-`cua-helium` expects Helium and the `computer` MCP server, which nix-config declares for every agent harness. `model-routing` expects CLIProxyAPI and its documented `pi-config` fallback. `remote-development` expects the personal Fleet CLI and generated Fleet configuration. Matt Pocock's `code-review`, `domain-modeling`, and `grilling` skills are installed directly from [`mattpocock/skills`](https://github.com/mattpocock/skills), and pstack's `tdd` skill is installed directly from [`cursor/plugins`](https://github.com/cursor/plugins/tree/main/pstack/skills/tdd), rather than being republished here. `cloudflare-composition-root` and `write-discoverable-code` use `coding-standards` for shared coding rules; install it alongside either skill. Working agreements and execution permissions belong to the consuming agent's global/repository policy, not this package. These integrations are deliberate prerequisites, not bundled services.
+`cua-helium` expects Helium and the `computer` MCP server, which nix-config declares for every agent harness. `model-routing` expects CLIProxyAPI and its documented `pi-config` fallback. `remote-development` expects the personal Fleet CLI and generated Fleet configuration. Matt Pocock's `code-review`, `domain-modeling`, `grill-me`, and `tdd` skills are installed directly from [`mattpocock/skills`](https://github.com/mattpocock/skills) rather than being republished here. `cloudflare-composition-root` and `write-discoverable-code` use `coding-standards` for shared coding rules; install it alongside either skill. Working agreements and execution permissions belong to the consuming agent's global/repository policy, not this package. These integrations are deliberate prerequisites, not bundled services.
 
-The adapted tstack PR skills use authenticated `gh`; `babysit-pr` also needs Python 3 on macOS/Linux and a cancellable command runner. Install `leaving-pr-comments` alongside `file-pr`, `modernize`, or `babysit-pr`; `takeover` uses all four. `council` and `sol-loop` depend on `model-routing` and a harness capable of read-only delegates on the selected models. The council roster is maintained in `model-routing`, not hardcoded in the workflow. Upstream `full-send` and `full-stop` are intentionally excluded.
+The adapted tstack PR skills use authenticated `gh`; `babysit-pr` also needs Python 3 on macOS/Linux and a cancellable command runner. Install `leaving-pr-comments` alongside `file-pr`, `modernize`, or `babysit-pr`; `takeover` uses all four. `council` depends on `model-routing` and a harness capable of read-only delegates on the selected models. The council roster is maintained in `model-routing`, not hardcoded in the workflow. Upstream `full-send`, `full-stop`, and `sol-loop` are intentionally excluded.
 
 ## Development
 

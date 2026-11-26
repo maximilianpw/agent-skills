@@ -1,6 +1,6 @@
 # NestJS
 
-Inspect installed Nest/Node versions, Express or Fastify, transport types, bootstrap globals, provider scopes, and shutdown behavior. Examples target Nest 11 on Node 20 or later; check installed APIs rather than relying on the docs site version label.
+Inspect installed Nest/Node versions, Express or Fastify, transport types, bootstrap globals, provider scopes, and shutdown behavior. Examples target Nest 11 on Node 20 or later. Nest 12 is released; on a Nest 12 project, check its migration guide and installed APIs before applying a version-specific note here.
 
 Trace the operation through middleware, guards, interceptors, pipes, controller, providers, outbound interceptors, exception filters, and the response. Map each provider to its declaring/exporting module.
 

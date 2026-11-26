@@ -23,10 +23,10 @@ description: Operate trusted remote development machines through the Fleet CLI. 
 - Use `fleet forward list` to inspect forwards and `fleet forward delete <pid>` to stop them.
 - Use `fleet t3 <host> [local-port]` when the selected host declares T3 Code support.
 
-Prefer non-interactive `fleet run` for finite verification. Keep Herdr local
-and run `fleet ssh` inside a local pane for interactive or long-running remote
-work. Herdr sees only the SSH process, so remote agents do not appear in its
-agent menu; tmux provides remote persistence instead. Prefer `fleet ssh`
+Prefer non-interactive `fleet run` for finite verification. Keep Rex local
+and run `fleet ssh` inside a local Rex pane for interactive or long-running
+remote work. Rex sees only the SSH process, so remote agents do not appear
+among its agents; tmux provides remote persistence instead. Prefer `fleet ssh`
 `--forward` for project ports that should share the attachment lifecycle; use
 standalone `fleet forward` for independent tunnels.
 

@@ -23,6 +23,6 @@ If startup requires the consumer to become ready, use an explicit readiness sign
 
 ## Verification
 
-Use finite fixtures only for finite sources. An open subscription fixture must remain open until the test deliberately closes or bounds it; collect only a stream known to terminate. Use test-controlled events and [clock/synchronization guidance](effect-testing.md) rather than sleeps.
+Use finite fixtures only for finite sources. An open subscription fixture must remain open until the test deliberately closes or bounds it; collect only a stream known to terminate. Use test-controlled events and [clock/synchronization guidance](../testing.md#clock-and-synchronization) rather than sleeps.
 
 Exercise readiness, post-acquisition consumer failure, and owner shutdown separately. Assert that failure is observed, health/restart behavior follows policy, and scope closure interrupts the consumer and releases its resources.

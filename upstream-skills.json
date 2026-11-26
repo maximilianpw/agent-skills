@@ -77,20 +77,6 @@
       "exactFiles": []
     },
     {
-      "localSkill": "sol-loop",
-      "attribution": "skills/sol-loop/ATTRIBUTION.md",
-      "repository": "https://github.com/t3dotgg/tstack.git",
-      "ref": "main",
-      "pinnedCommit": "7de017b3fc9d50c03cf3ecb98fb71e0ca65a78bd",
-      "upstreamPaths": [
-        "skills/sol-loop"
-      ],
-      "licensePaths": [
-        "LICENSE"
-      ],
-      "exactFiles": []
-    },
-    {
       "localSkill": "takeover",
       "attribution": "skills/takeover/ATTRIBUTION.md",
       "repository": "https://github.com/t3dotgg/tstack.git",

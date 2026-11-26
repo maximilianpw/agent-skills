@@ -10,7 +10,7 @@ Nest supports three useful levels:
 
 Test through the interface callers use. A controller unit test cannot prove global `ValidationPipe` options. A provider test does not need an HTTP server.
 
-Keep unit specs next to their class as `*.spec.ts` when the repository follows Nest's scaffold. Keep end-to-end tests under `test/` as `*.e2e-spec.ts`. Nest is test-runner agnostic. Nest 11 scaffolds Jest by default; follow the installed runner rather than future Nest 12 plans.
+Keep unit specs next to their class as `*.spec.ts` when the repository follows Nest's scaffold. Keep end-to-end tests under `test/` as `*.e2e-spec.ts`. Nest is test-runner agnostic. Nest 11 scaffolds Jest by default; follow the installed runner.
 
 ## TestingModule
 

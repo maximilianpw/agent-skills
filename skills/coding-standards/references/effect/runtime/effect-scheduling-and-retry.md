@@ -26,4 +26,4 @@ For HTTP-level 429 handling, use [HTTP client guidance](effect-http-clients.md#r
 
 ## Verification
 
-Use [TestClock and explicit synchronization](effect-testing.md) to check initial versus additional attempts, delays, exhaustion, interruption, and partial side effects. Every retry path states the guarantee making a repeated mutation safe; every loop has an owner and a termination policy.
+Use [TestClock and explicit synchronization](../testing.md#clock-and-synchronization) to check initial versus additional attempts, delays, exhaustion, interruption, and partial side effects. Every retry path states the guarantee making a repeated mutation safe; every loop has an owner and a termination policy.

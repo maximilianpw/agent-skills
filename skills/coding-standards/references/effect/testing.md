@@ -1,4 +1,6 @@
-# Testing
+# Effect testing
+
+Shared [testing](../testing.md) owns assertions on observable outcomes and the choice of test doubles; this file specializes it for Effect-owned behavior. Use the installed `@effect/vitest` documentation for test helper signatures; keep its release compatible with the installed Effect version.
 
 ## Test through real interfaces
 
@@ -13,23 +15,17 @@ Prefer tests by confidence:
 3. focused/property tests for pure Domain Modules;
 4. unit tests for meaningful behavior rather than implementation details.
 
-Module mocking with `vi.mock` or `jest.mock` is forbidden. Replace behavior through real services and implementations:
+Replace Effect-owned behavior through services and Layers, local database substitutes such as SQLite, faithful in-memory implementations, or fake external implementations, never through `vi.mock` or `jest.mock`. Prefer a recording implementation and inspect its public records over spying on implementation methods.
 
-- constructor-injected interfaces/classes;
-- Effect services/Layers;
-- local database substitutes such as SQLite;
-- faithful in-memory implementations;
-- fake external implementations when needed.
+## Clock and synchronization
 
-Assert observable outcomes:
+Use `it.effect` for the test-services environment, including TestClock. Use `it.live` only when real time or live runtime services are the behavior under test; it does not provide TestClock automatically.
 
-- returned values/errors;
-- persisted state;
-- emitted events/messages;
-- rendered responses;
-- sent email records in a recording/local implementation.
+Fork an effect that sleeps before advancing the test clock, and coordinate through readiness or observable state. Awaiting the sleep before advancing time deadlocks the test. Wall-clock sleeps are not evidence that another fiber reached a particular state.
 
-A spy assertion is appropriate only when the interaction is itself the observable behavior. Prefer a recording implementation and inspect its public records over spying on implementation methods.
+Use a signal for one-shot readiness, a test-controlled queue for event sequences, and an observable state/control service for repeated interactions. Readiness must mean the required initialization completed, not merely that a fiber started. Test startup failure and post-readiness failure separately when a consumer can fail in either phase.
+
+A concurrency test should fail if ordering, failure observation, interruption, or finalization is broken, not merely if the final return value changes.
 
 ## Property tests and arbitraries
 
@@ -66,6 +62,23 @@ A dependency interface represents real ownership or variability, not a test-only
 - Use and name an implementation as in-memory only when it faithfully preserves the complete observable contract under test.
 
 Keep production branches, exports, flags, and behavior determined by production needs. Test through an existing public interface or a faithful inert harness when no real dependency interface exists.
+
+### Reusable test implementations
+
+A reusable substitute must implement its advertised contract completely. Prefer the real local database/runtime when transactions, serialization, or protocol behavior matter. Tiny one-off partial doubles stay in their focused tests; `Layer.mock` can fail loudly for omitted operations but is not a faithful reusable implementation.
+
+When reusable observation or failure injection is needed:
+
+1. Keep production callers on the real `Service` tag.
+2. Expose controls on a separate `TestService` tag, not production methods.
+3. Acquire one backing object and provide it under both tags with `Layer.effectContext` so test controls affect the exact instance the caller uses.
+4. Keep mutable state inside that Layer acquisition; test isolation must acquire fresh state rather than reuse a top-level object.
+
+Use [test Layer names](runtime/effect-services.md#test-layers) that distinguish faithful in-memory behavior from a controlled test double. Members are function-valued, including zero-argument observations, so named operation boundaries apply consistently.
+
+## Configuration
+
+Provide a deterministic ConfigProvider when testing recipes. Supplying a decoded service bypasses decoding and cannot prove defaults, malformed-value failures, or provider precedence; see [provider tests](runtime/effect-configuration.md#providers).
 
 ## Compile-time behavior
 

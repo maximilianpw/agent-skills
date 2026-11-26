@@ -14,7 +14,7 @@ These references add local conventions and failure-mode checks to the shared sta
 - [Persistence](effect/persistence.md): databases, caches, ORM records, or durable storage.
 - [Workflow safety](effect/workflows-transactions-and-idempotency.md): transactions, retries, replay, compensation, and uncertain outcomes.
 - [Configuration and resources](effect/configuration-and-resources.md): startup configuration, resource lifetimes, time, randomness, or global state.
-- [Testing](effect/testing.md): changed behavior, parser contracts, public inference, or test implementations.
+- [Testing](effect/testing.md): changed behavior, test clocks and concurrency, parser contracts, public inference, or test implementations.
 - [TypeScript additions](effect/typescript-safety.md): compiler settings, mutable state, public signatures, or type escapes.
 - [Lint policy](effect/lint-and-policy.md): lint configuration, custom rules, or prevention tooling.
 - [Imports and exports](effect/imports-exports-and-files.md): Effect imports or public entrypoints.

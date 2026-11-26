@@ -20,7 +20,7 @@ Load only branches matching the changed behavior:
 - Memoization, TTLs, deduplication, or batching: [Caching](effect-caching.md).
 - Streams, subscriptions, buffers, or long-lived consumers: [Streams](effect-streams.md).
 - Outgoing HTTP and rate limits: [HTTP clients](effect-http-clients.md).
-- Test clocks, concurrent tests, or test Layers: [Testing](effect-testing.md).
+- Test clocks, concurrent tests, or test Layers: [Testing](../testing.md).
 
 ## Local workflow style
 
